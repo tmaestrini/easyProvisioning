@@ -1,0 +1,15 @@
+# Logs
+logs
+*.log
+
+# IDEs
+.idea/
+.vscode/
+
+# Configurations
+
+
+# Temporary files
+cache
+~*
+.DS_Store
