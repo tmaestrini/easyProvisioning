@@ -14,6 +14,7 @@ Function Add-SPOStructure {
       Lcid  = $SPOTemplateConfigStructure.values.Lcid ?? 1031
     }
     
+    # Create new site
     $createdSite = $null
     try {
       switch ($SPOTemplateConfigStructure.values.Type) {
@@ -24,23 +25,42 @@ Function Add-SPOStructure {
       }
 
       Write-Host $($createdSite) -NoNewline
-      Write-Host " ✔︎ OK" -ForegroundColor DarkGreen
-      return (Connect-PnPOnline -Url $createdSite -ReturnConnection -Interactive)
+      Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
     }
     catch {
-      <#Do this if a terminating exception happens#>
       Write-Host " ❌ failed: $($_)" -ForegroundColor Red      
     }
 
+    # Handle Hub association
+    if ($SPOTemplateConfigStructure.values.IsHub -or $SPOTemplateConfigStructure.values.ConnectedHubsite) {
+      try {
+        Write-Host "⎿ Handling hub association(s): " -NoNewline
+        if ($SPOTemplateConfigStructure.values.IsHub) { Register-PnPHubSite -Site $createdSite -Connection $global:SPOAdminConnection }
+        if ($SPOTemplateConfigStructure.values.ConnectedHubsite -and $SPOTemplateConfigStructure.values.IsHub) { 
+          Add-PnPHubToHubAssociation -SourceUrl $createdSite -TargetUrl $SPOTemplateConfigStructure.values.ConnectedHubsite -Connection $global:SPOAdminConnection
+        }
+        if ($SPOTemplateConfigStructure.values.ConnectedHubsite) { 
+          Add-PnPHubSiteAssociation -Site $createdSite -HubSite $SPOTemplateConfigStructure.values.ConnectedHubsite -Connection $global:SPOAdminConnection
+        }
+          
+        Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
+      }
+      catch {
+        Write-Host " ❌ failed: $($_)" -ForegroundColor Red
+      }
+    }
+
+    # connect to new site and return connection for further purpose
+    return (Connect-PnPOnline -Url $createdSite -ReturnConnection -Interactive)
   }
 
-  Function Add-SiteContentOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [Object[]]$SPOTemplateContentConfig) {
+  Function Add-SiteContentOnTarget([Object]$siteConnection, [Object[]]$SPOTemplateContentConfig) {
     foreach ($siteContent in $SPOTemplateContentConfig) {
       try {
         Write-Host "⎿ Creating content <$($siteContent.keys)>: '$($siteContent.values.Title)'" -NoNewline
         $quickLaunch = $siteContent.values.OnQuickLaunch -and $siteContent.values.OnQuickLaunch -eq $true ? $true : $false
         $list = New-PnPList -Template $siteContent.keys -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection
-        Write-Host " ✔︎ OK" -ForegroundColor DarkGreen
+        Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
       }
       catch {
         Write-Host " ❌ failed: $($_)" -ForegroundColor Red
@@ -48,7 +68,7 @@ Function Add-SPOStructure {
     }
   }
 
-  Function Invoke-PnPSiteTemplateOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [string]$templatePath, [hashtable]$templateParameters) {
+  Function Invoke-PnPSiteTemplateOnTarget([Object]$siteConnection, [string]$templatePath, [hashtable]$templateParameters) {
     Write-Host "⎿ Invoking site template (PnP): '$($templatePath)' [started]"
     try {
       Invoke-PnPSiteTemplate -Path $templatePath -Parameters $templateParameters -Connection $siteConnection
@@ -76,5 +96,5 @@ Function Add-SPOStructure {
       Invoke-PnPSiteTemplateOnTarget -templatePath $siteStructure.values.'Provisioning Template' -templateParameters $siteStructure.values.'Provisioning Parameters'`
         -siteConnection $newSiteConnection 
     }
-  } 
+  }
 }
