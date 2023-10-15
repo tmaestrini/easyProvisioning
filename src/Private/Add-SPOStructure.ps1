@@ -38,18 +38,26 @@ Function Add-SPOStructure {
     foreach ($siteContent in $SPOTemplateContentConfig) {
       try {
         Write-Host "⎿ Creating content <$($siteContent.keys)>: '$($siteContent.values.Title)'" -NoNewline
-        $quickLaunch3 = $siteContent.values.OnQuickLaunch -and $siteContent.values.OnQuickLaunch -eq $true ? $true : $false
+        $quickLaunch = $siteContent.values.OnQuickLaunch -and $siteContent.values.OnQuickLaunch -eq $true ? $true : $false
         $list = New-PnPList -Template $siteContent.keys -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection
         Write-Host " ✔︎ OK" -ForegroundColor DarkGreen
       }
       catch {
-        Write-Host " ❌ failed: $($_)" -ForegroundColor Red      
+        Write-Host " ❌ failed: $($_)" -ForegroundColor Red
       }
     }
   }
 
-  Function Invoke-PnPSiteTemplateOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection) {
-    throw "Invoke-PnPSiteTemplateOnTarget not implemented yet"
+  Function Invoke-PnPSiteTemplateOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [string]$templatePath, [hashtable]$templateParameters) {
+    Write-Host "⎿ Invoking site template (PnP): '$($templatePath)' [started]"
+    try {
+      Invoke-PnPSiteTemplate -Path $templatePath -Parameters $templateParameters -Connection $siteConnection
+      Write-Host "⎿ Invoking site template (PnP): '$($templatePath)'" -NoNewline
+      Write-Host " ✔︎ OK" -ForegroundColor DarkGreen
+    }
+    catch {
+      Write-Host " ❌ failed: $($_)" -ForegroundColor Red
+    }
   }
 
   if ($null -eq $SPOTemplateConfig.TenantId) { throw "No SharePoint tenant id provided" }
@@ -64,6 +72,9 @@ Function Add-SPOStructure {
   foreach ($siteStructure in $SPOTemplateConfig.Structure) {
     $newSiteConnection = New-Site -SPOTemplateConfigStructure $siteStructure
     Add-SiteContentOnTarget -siteConnection $newSiteConnection -SPOTemplateContentConfig $siteStructure.values.Content
-    if ($siteStructure.values.'Provisioning Template') { Invoke-PnPSiteTemplateOnTarget -siteConnection $newSiteConnection }
+    if ($siteStructure.values.'Provisioning Template') {
+      Invoke-PnPSiteTemplateOnTarget -templatePath $siteStructure.values.'Provisioning Template' -templateParameters $siteStructure.values.'Provisioning Parameters'`
+        -siteConnection $newSiteConnection 
+    }
   } 
 }
