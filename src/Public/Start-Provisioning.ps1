@@ -4,12 +4,15 @@ Function Start-Provisioning {
     [Parameter(
       Mandatory = $true,
       HelpMessage = "Full name of the template, including .yml (aka <name>.yml)"
-    )][string]$TemplateName  
+    )][string]$TemplateName,
+    [Parameter(
+      Mandatory = $false
+    )][switch]$KeepConnectionsAlive
   )
 
   try {
     $template = Get-Template -TemplateName $TemplateName
-    Add-SPOStructure -SPOTemplateConfig $template.SharePoint
+    Add-SPOStructure -SPOTemplateConfig $template.SharePoint -KeepConnectionsAlive:$KeepConnectionsAlive
   }
   catch {
     $_

@@ -3,11 +3,14 @@ Function Add-SPOStructure {
   param(
     [Parameter(
       Mandatory = $true
-    )][hashtable]$SPOTemplateConfig  
+    )][hashtable]$SPOTemplateConfig,  
+    [Parameter(
+      Mandatory = $false
+    )][switch]$KeepConnectionsAlive  
   )
 
   Function New-Site([hashtable]$SPOTemplateConfigStructure) {
-    Write-Host "Creating site '$($SPOTemplateConfigStructure.keys)': " -NoNewline
+    Write-Host "⭐️ Creating site '$($SPOTemplateConfigStructure.keys)': " -NoNewline
     $atts = @{
       Title = $SPOTemplateConfigStructure.keys
       Url   = "$($spoUrl)$($SPOTemplateConfigStructure.values.Url)"
@@ -114,5 +117,9 @@ Function Add-SPOStructure {
       Invoke-PnPSiteTemplateOnTarget -templatePath $siteStructure.values.'Provisioning Template' -templateParameters $siteStructure.values.'Provisioning Parameters'`
         -siteConnection $newSiteConnection 
     }
+  }
+
+  if (-not $KeepConnectionsAlive) {
+    Disconnect-SPOAdminUrl
   }
 }
