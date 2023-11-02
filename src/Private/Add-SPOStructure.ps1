@@ -54,7 +54,7 @@ Function Add-SPOStructure {
     return (Connect-PnPOnline -Url $createdSite -ReturnConnection -Interactive)
   }
 
-  Function Add-SiteContentOnTarget([Object]$siteConnection, [Object[]]$SPOTemplateContentConfig) {
+  Function Add-SiteContentOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [Object[]]$SPOTemplateContentConfig) {
     foreach ($siteContent in $SPOTemplateContentConfig) {
       try {
         Write-Host "⎿ Creating content <$($siteContent.keys)>: '$($siteContent.values.Title)'" -NoNewline
@@ -68,7 +68,7 @@ Function Add-SPOStructure {
     }
   }
 
-  Function Invoke-PnPSiteTemplateOnTarget([Object]$siteConnection, [string]$templatePath, [hashtable]$templateParameters) {
+  Function Invoke-PnPSiteTemplateOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [string]$templatePath, [hashtable]$templateParameters) {
     Write-Host "⎿ Invoking site template (PnP): '$($templatePath)' [started]"
     try {
       Invoke-PnPSiteTemplate -Path $templatePath -Parameters $templateParameters -Connection $siteConnection
