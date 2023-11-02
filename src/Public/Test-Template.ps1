@@ -15,7 +15,7 @@ Function Test-Template {
     Assert ($null -ne $template.SharePoint) "Missing SharePoint configuration. Please check template configuration file"
     Assert ($null -ne $template.SharePoint.TenantId) "Missing SharePoint tenant identifier in configuration. Please check template configuration file"
     Assert ($null -ne $template.SharePoint.AdminUpn) "Missing UPN for admin account in configuration. Please check template configuration file"
-    Assert ([mailaddress]$template.SharePoint.AdminUpn) "admin account is not UPN. Please check template configuration file"
+    Assert ($null -ne [mailaddress]$template.SharePoint.AdminUpn) "admin account is not UPN. Please check template configuration file"
     
     foreach ($siteStructure in $template.Structure) {
       $siteName = $siteStructure.keys
