@@ -1,0 +1,26 @@
+flowchart LR
+  %%{ init: { 'flowchart': { 'curve': 'linear' } } }%%
+
+  subgraph content [ ]
+    %% Content
+    <%= $sitemapContent %>
+    
+    %% Relations
+    <%= $sitemapRelations %>
+  end
+
+  subgraph legend [ ]
+    CommSite(Communication Site):::CommSite
+    TeamSite[Team Site]:::TeamSite
+    SPOTeamSite>Team Site w/o M365 Group]:::SPOTeamSite
+  end
+
+  %% Style definitions
+  classDef default fill:white, stroke:black, stroke-width:0.5px;
+  classDef CommSite fill:yellow;
+  classDef TeamSite fill:white;
+  classDef cluster fill:#fff,stroke:#bbb,stroke-width:0px,color:#326ce5;
+  classDef legend fill:#fff,stroke:#bbb,stroke-width:1px,color:black,font-size:10px;
+
+  class content cluster;
+  class legend legend;
