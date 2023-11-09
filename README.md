@@ -42,7 +42,7 @@ Import-Module .\src\Provisioning.psm1 -Force
 Sync-Hubnavigation -TemplateName "standard.yml"
 ```
 
-The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the provisioning process as many times you want without expecting any side effects!
+The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
 
 
 ## Template file
