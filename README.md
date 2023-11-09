@@ -16,13 +16,20 @@ Install-Module -Name PnP.PowerShell -RequiredVersion 2.2.0 -Scope CurrentUser
 
 
 ## Usage
+### Generate SharePoint structure
+The resource provisioning generally follows the structure that is defined in the *template file* (see section below).
+Simply start the provisioning process by importing the `Provisioning.psm1` module and then calling the `Start-Provisioning` command as follows:
+
 ```powershell
 Import-Module .\src\Provisioning.psm1 -Force
 Start-Provisioning -TemplateName "standard.yml" #-KeepConnectionsAlive
 
-# To test your template, simply call
+# To test the "consistency" of your template, simply call:
 Test-Template -TemplateName "standard.yml"
 ```
+
+The resource provisioning is idempotent; there are no side effects if you start the process multiple times and each defined resource or setting is only provisioned once.
+
 
 ## Template file
 To get your resources provisioned, just write them down in one single YAML file with the
@@ -49,6 +56,7 @@ SharePoint:
         Site Admins:  # optional
         IsHub: true  # optional
         ConnectedHubsite:  # optional
+        HomepageLayout: Article # optional; set to 'Home', 'Article' or 'SingleWebPartAppPage'
         Provisioning Template:  # optional; reference any PnP Site Template from your local machine
         # the content structure (aka assets) of your site
         Content:
