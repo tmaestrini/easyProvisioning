@@ -130,19 +130,16 @@ Function Add-SPOStructure {
   # Create sites and content
   foreach ($siteStructure in $SPOTemplateConfig.Structure) {
     $newSiteConnection = New-Site -SPOTemplateConfigStructure $siteStructure
-    Add-SiteContentOnTarget -siteConnection $newSiteConnection -SPOTemplateContentConfig $siteStructure.Values.Content
-    
+
     if ($siteStructure.Values.HomepageLayout) {
       Set-HomepageLayout -siteConnection $newSiteConnection -SPOStructureSiteTemplateConfig $siteStructure
     }
+    
+    Add-SiteContentOnTarget -siteConnection $newSiteConnection -SPOTemplateContentConfig $siteStructure.Values.Content
 
     if ($siteStructure.Values.'Provisioning Template') {
       Invoke-PnPSiteTemplateOnTarget -templatePath $siteStructure.Values.'Provisioning Template' -templateParameters $siteStructure.Values.'Provisioning Parameters'`
         -siteConnection $newSiteConnection 
-    }
-
-    if ($siteStructure.Values.CopyHubNavigation) {
-      Copy-Hubnavigation -SPOStructureSiteTemplateConfig $siteStructure -SPOBaseUrl $spoUrl
     }
   }
 
