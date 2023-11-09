@@ -1,0 +1,39 @@
+Tenant: lamarotte
+
+# Sharepoint Specific Settings
+SharePoint:
+  TenantId: lamarotte
+  AdminUpn: administrator.maestrini@lamarotte.ch
+  
+  Structure:
+    - Eins:
+        Url: /sites/TestEins
+        Type: Communication
+        Template: Blank
+        Lcid: 1031
+        Site Admins: 
+        IsHub: true
+        HomepageLayout: Home
+        CopyHubNavigation: /
+        Provisioning Template: 
+        Content:
+          - DocumentLibrary:
+              Title: Eins
+          - List:  
+              Title: Zwei
+              OnQuickLaunch: True
+          - EventsList:
+              Title: Drei
+              OnQuickLaunch: True
+          - MediaLibrary:
+              Title: Vier
+              OnQuickLaunch: True
+    - Zwei:
+        Url: /sites/TestZwei
+        Type: Communication
+        Template: Blank
+        Site Admins: 
+        Provisioning Template:
+        IsHub: true
+        CopyHubNavigation: /
+ 

@@ -1,0 +1,38 @@
+Tenant: <your tenant name>
+
+# Sharepoint Specific Settings
+SharePoint:
+  TenantId: <the SharePoint tenant id>
+  AdminUpn: <the admin's UPN>
+
+  Structure:
+    - One:
+        # the relative site url
+        Url: /sites/TestOne
+        # set to 'Communication', 'Team' or 'SPOTeam' (Modern Team Site w/o M365 Group)
+        Type: Communication 
+        # only needed when type is 'Communication'; set it to 'Blank', 'Showcase' or 'Topic'
+        Template: Blank 
+        Site Admins: # optional
+        Lcid: 1031  # optional; set to 1031 by default
+        Site Admins:  # optional
+        IsHub: true  # optional
+        ConnectedHubsite:  # optional
+        Provisioning Template:  # optional; reference any PnP Site Template from your local machine
+        # the content structure (aka assets) of your site
+        Content:
+          # creates a standard document library
+          - DocumentLibrary: 
+              Title: One
+              OnQuickLaunch: True # optional; places a link in the quick launch navigation
+          # creates a generic SPO list
+          - List:  
+              Title: Three
+              OnQuickLaunch: True
+          # creates a calendar
+          - EventsList:
+              Title: Four
+          # creates a specific media library to store media assets
+          - MediaLibrary:
+              Title: Five
+              OnQuickLaunch: True

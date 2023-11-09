@@ -16,17 +16,38 @@ Install-Module -Name PnP.PowerShell -RequiredVersion 2.2.0 -Scope CurrentUser
 
 
 ## Usage
+### Generate SharePoint structure
+The resource provisioning generally follows the structure that is defined in the *template file* (see section below).
+Simply start the provisioning process by importing the `Provisioning.psm1` module and then calling the `Start-Provisioning` command as follows:
+
 ```powershell
 Import-Module .\src\Provisioning.psm1 -Force
 Start-Provisioning -TemplateName "standard.yml" #-KeepConnectionsAlive
 
-# To test your template, simply call
+# To test the "consistency" of your template, simply call:
 Test-Template -TemplateName "standard.yml"
 ```
 
+The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the provisioning process as many times you want without expecting any side effects!
+
+### Sync hub navigation from template site
+You can sync any given hub navigation to any given site. Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed again in a separate step.
+
+The hub navigation synchronization copies an existing navigation structure from a relative site url (e.g. `/sites/IntranetHome`) that is specified in the template attribute `CopyHubNavigation` in the *template file* (see section below) and applies it to the target site (that is the site where the template attribute `CopyHubNavigation` was defined). Just make sure that the target site has a proper hub navigation and the relative path to the site url exists. This is really nice – it leads to a consistent navigation experience on all intranet sites!
+
+Simply start the provisioning process by importing the `Provisioning.psm1` module (if not already done so!) and then calling the `Sync-Hubnavigation` command as follows:
+
+```powershell
+Import-Module .\src\Provisioning.psm1 -Force
+Sync-Hubnavigation -TemplateName "standard.yml"
+```
+
+The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
+
+
 ## Template file
 To get your resources provisioned, just write them down in one single YAML file with the
-following structure (assuming the file is referenced as `standard.yml` in the usage example above):
+following structure (assuming the file is referenced as `standard.yml` in the usage example above) that exists under the path `/templates`):
 
 ```yaml
 Tenant: <your tenant name>
@@ -47,8 +68,10 @@ SharePoint:
         Site Admins: # optional
         Lcid: 1031  # optional; set to 1031 by default
         Site Admins:  # optional
+        HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
         IsHub: true  # optional
         ConnectedHubsite:  # optional
+        CopyHubNavigation: # optional; set the relative path to the hub site from where the navigation structure will be copied
         Provisioning Template:  # optional; reference any PnP Site Template from your local machine
         # the content structure (aka assets) of your site
         Content:

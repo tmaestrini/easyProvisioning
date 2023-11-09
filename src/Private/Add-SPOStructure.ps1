@@ -57,6 +57,28 @@ Function Add-SPOStructure {
     return (Connect-PnPOnline -Url $createdSite -ReturnConnection -Interactive)
   }
 
+  Function Set-HomepageLayout([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [Object[]]$SPOStructureSiteTemplateConfig) {
+    try {
+      Write-Host "⎿ Setting homepage layout to <$($SPOStructureSiteTemplateConfig.values.HomepageLayout)>: " -NoNewline
+      $homepageRefUrl = Get-PnPHomePage -Connection $siteConnection
+      $homepage = Get-PnPPage -Identity $homepageRefUrl.Split("/")[-1] -Connection $siteConnection
+
+      if ("Article" -eq $SPOStructureSiteTemplateConfig.values.HomepageLayout -or
+        "Home" -eq $SPOStructureSiteTemplateConfig.values.HomepageLayout -or
+        "SingleWebPartAppPage" -eq $SPOStructureSiteTemplateConfig.values.HomepageLayout) {
+        $null = Set-PnPPage -Identity $homepage -LayoutType $SPOStructureSiteTemplateConfig.values.HomepageLayout -Connection $siteConnection
+      }
+      else {
+        throw "Homepage layout <$($SPOStructureSiteTemplateConfig.values.HomepageLayout)> does not exist."
+      }
+      
+      Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
+    }
+    catch {
+      Write-Host " ❌ failed: $($_)" -ForegroundColor Red      
+    }
+  }
+
   Function Add-SiteContentOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [Object[]]$SPOTemplateContentConfig) {
     foreach ($siteContent in $SPOTemplateContentConfig) {
       try {
@@ -111,11 +133,20 @@ Function Add-SPOStructure {
   # Create sites and content
   foreach ($siteStructure in $SPOTemplateConfig.Structure) {
     $newSiteConnection = New-Site -SPOTemplateConfigStructure $siteStructure
-    Add-SiteContentOnTarget -siteConnection $newSiteConnection -SPOTemplateContentConfig $siteStructure.values.Content
+$newSiteConnection
+    if ($siteStructure.Values.HomepageLayout) {
+      Set-HomepageLayout -siteConnection $newSiteConnection -SPOStructureSiteTemplateConfig $siteStructure
+    }
     
-    if ($siteStructure.values.'Provisioning Template') {
-      Invoke-PnPSiteTemplateOnTarget -templatePath $siteStructure.values.'Provisioning Template' -templateParameters $siteStructure.values.'Provisioning Parameters'`
+    Add-SiteContentOnTarget -siteConnection $newSiteConnection -SPOTemplateContentConfig $siteStructure.Values.Content
+
+    if ($siteStructure.Values.'Provisioning Template') {
+      Invoke-PnPSiteTemplateOnTarget -templatePath $siteStructure.Values.'Provisioning Template' -templateParameters $siteStructure.Values.'Provisioning Parameters'`
         -siteConnection $newSiteConnection 
+    }
+
+    if ($siteStructure.Values.CopyHubNavigation) {
+      Copy-Hubnavigation -SPOStructureSiteTemplateConfig $siteStructure -SPOBaseUrl $spoUrl
     }
   }
 
