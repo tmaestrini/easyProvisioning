@@ -68,7 +68,10 @@ Function Add-SPOStructure {
         "SingleWebPartAppPage" -eq $SPOStructureSiteTemplateConfig.values.HomepageLayout) {
         $null = Set-PnPPage -Identity $homepage -LayoutType $SPOStructureSiteTemplateConfig.values.HomepageLayout -Connection $siteConnection
       }
-  
+      else {
+        throw "Homepage layout <$($SPOStructureSiteTemplateConfig.values.HomepageLayout)> does not exist."
+      }
+      
       Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
     }
     catch {

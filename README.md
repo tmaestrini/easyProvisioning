@@ -28,7 +28,7 @@ Start-Provisioning -TemplateName "standard.yml" #-KeepConnectionsAlive
 Test-Template -TemplateName "standard.yml"
 ```
 
-The resource provisioning is idempotent; there are no side effects if you start the process multiple times and each defined resource or setting is only provisioned once.
+The resource provisioning process is idempotent; there are no side effects if you start the process multiple times and each defined resource or setting is only provisioned once.
 
 
 ## Template file
@@ -56,7 +56,7 @@ SharePoint:
         Site Admins:  # optional
         IsHub: true  # optional
         ConnectedHubsite:  # optional
-        HomepageLayout: Article # optional; set to 'Home', 'Article' or 'SingleWebPartAppPage'
+        HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
         Provisioning Template:  # optional; reference any PnP Site Template from your local machine
         # the content structure (aka assets) of your site
         Content:
