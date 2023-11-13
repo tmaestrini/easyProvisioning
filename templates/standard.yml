@@ -16,8 +16,10 @@ SharePoint:
         Site Admins: # optional
         Lcid: 1031  # optional; set to 1031 by default
         Site Admins:  # optional
+        HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
         IsHub: true  # optional
         ConnectedHubsite:  # optional
+        CopyHubNavigation: # optional; set the relative path to the hub site from where the navigation structure will be copied
         Provisioning Template:  # optional; reference any PnP Site Template from your local machine
         # the content structure (aka assets) of your site
         Content:

@@ -38,12 +38,12 @@ Function Add-SPOStructure {
     if ($SPOTemplateConfigStructure.values.IsHub -or $SPOTemplateConfigStructure.values.ConnectedHubsite) {
       try {
         Write-Host "⎿ Handling hub association(s): " -NoNewline
-        if ($SPOTemplateConfigStructure.values.IsHub) { Register-PnPHubSite -Site $createdSite -Connection $global:SPOAdminConnection -ErrorAction SilentlyContinue }
+        if ($SPOTemplateConfigStructure.values.IsHub) { $null = Register-PnPHubSite -Site $createdSite -Connection $global:SPOAdminConnection -ErrorAction SilentlyContinue }
         if ($SPOTemplateConfigStructure.values.ConnectedHubsite -and $SPOTemplateConfigStructure.values.IsHub) { 
-          Add-PnPHubToHubAssociation -SourceUrl $createdSite -TargetUrl $SPOTemplateConfigStructure.values.ConnectedHubsite -Connection $global:SPOAdminConnection
+          $null = Add-PnPHubToHubAssociation -SourceUrl $createdSite -TargetUrl $SPOTemplateConfigStructure.values.ConnectedHubsite -Connection $global:SPOAdminConnection
         }
         elseif ($SPOTemplateConfigStructure.values.ConnectedHubsite) { 
-          Add-PnPHubSiteAssociation -Site $createdSite -HubSite $SPOTemplateConfigStructure.values.ConnectedHubsite -Connection $global:SPOAdminConnection
+          $null = Add-PnPHubSiteAssociation -Site $createdSite -HubSite $SPOTemplateConfigStructure.values.ConnectedHubsite -Connection $global:SPOAdminConnection
         }
           
         Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
