@@ -1,4 +1,4 @@
-function New-Sitemap {
+function New-MermaidSitemap {
   [cmdletbinding()]
   param(
     [Parameter(
