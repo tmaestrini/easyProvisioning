@@ -13,25 +13,28 @@ Function Add-SPOStructure {
     Write-Host "⭐️ Creating site '$($SPOTemplateConfigStructure.keys)': " -NoNewline
     $atts = @{
       Title = $SPOTemplateConfigStructure.keys
-      Url   = "$($spoUrl)$($SPOTemplateConfigStructure.values.Url)"
+      Url   = "$($spoUrl)$($SPOTemplateConfigStructure.values.Url.TrimStart('/'))"
       Lcid  = $SPOTemplateConfigStructure.values.Lcid ?? 1031
     }
     
     # Create new site
     $createdSite = $null
     try {
-      switch ($SPOTemplateConfigStructure.values.Type) {
-        "Communication" { $createdSite = New-PnPSite -Wait -Type CommunicationSite @atts -SiteDesign $SPOTemplateConfigStructure.values.Template -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
-        "Team" { $createdSite = New-PnPSite -Wait -Type TeamSite @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
-        "SPOTeam" { $createdSite = New-PnPSite -Wait -Type TeamSiteWithoutMicrosoft365Group @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
-        Default {}
+      $createdSite = (Get-PnPTenantSite -Identity $atts.Url -Connection $global:SPOAdminConnection).Url
+      if ($null -eq $createdSite) {
+        switch ($SPOTemplateConfigStructure.values.Type) {
+          "Communication" { $createdSite = New-PnPSite -Wait -Type CommunicationSite @atts -SiteDesign $SPOTemplateConfigStructure.values.Template -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
+          "Team" { $createdSite = New-PnPSite -Wait -Type TeamSite @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
+          "SPOTeam" { $createdSite = New-PnPSite -Wait -Type TeamSiteWithoutMicrosoft365Group @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
+          Default { throw "Site type not matching" }
+        }
       }
-
       Write-Host $($createdSite) -NoNewline
       Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
     }
     catch {
-      Write-Host " ❌ failed: $($_)" -ForegroundColor Red      
+      Write-Host " ❌ failed: $($_)" -ForegroundColor Red
+      exit 1   
     }
 
     # Handle Hub association
@@ -133,7 +136,6 @@ Function Add-SPOStructure {
   # Create sites and content
   foreach ($siteStructure in $SPOTemplateConfig.Structure) {
     $newSiteConnection = New-Site -SPOTemplateConfigStructure $siteStructure
-$newSiteConnection
     if ($siteStructure.Values.HomepageLayout) {
       Set-HomepageLayout -siteConnection $newSiteConnection -SPOStructureSiteTemplateConfig $siteStructure
     }
