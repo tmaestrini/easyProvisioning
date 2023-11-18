@@ -14,22 +14,24 @@ function New-MermaidSitemap {
   # Create sites and content
   $sitemapContent = @()
   $sitemapRelations = @()
+  $sitemapHubsites = @()
 
   foreach ($siteStructure in $template.SharePoint.Structure) {
-    $node = $siteStructure.values.Type -eq 'Communication' ? "$($siteStructure.keys)(%content%):::CommSite" : $siteStructure.values.Type -eq 'Team' ? "$($siteStructure.keys)[%content%]:::TeamSite" : "$($siteStructure.keys)>%content%]:::SPOTeamSite"
-    $node = $siteStructure.values.IsHub -eq $true ? $node.Replace('%content%', 'fa:fa-home %content%') : $node
-    $node = $node.Replace('%content%', "$($siteStructure.keys)<br/>$($siteStructure.values.Url)")
+    $node = $siteStructure.values.Type -eq 'Communication' ? "$($siteStructure.values.Url)(""%content%""):::CommSite" : $siteStructure.values.Type -eq 'Team' ? "$($siteStructure.values.Url)[""%content%""]:::TeamSite" : "$($siteStructure.values.Url)>""%content%""]:::SPOTeamSite"
+    # $node = $siteStructure.values.IsHub -eq $true ? $node.Replace('%content%', 'fa:fa-home %content%') : $node
+    $node = $siteStructure.values.IsHub -eq $true ? $node.Replace('%content%', '🏚 %content%') : $node
+    $node = $node.Replace('%content%', "$($siteStructure.keys)<br/>[$($siteStructure.values.Url)]")
     $sitemapContent += "$node`n"
     
     if ($siteStructure.values.ConnectedHubsite) {
-      $sitemapContent += "$($siteStructure.values.ConnectedHubsite)[[fa:fa-home $($siteStructure.values.ConnectedHubsite)]]`n"
-      $sitemapRelations += "$($siteStructure.values.ConnectedHubsite) --> $($siteStructure.keys)`n"
+      # $sitemapContent += "$($siteStructure.values.ConnectedHubsite)[[fa:fa-home $($siteStructure.values.ConnectedHubsite)]]`n"
+      $sitemapRelations += "$($siteStructure.values.ConnectedHubsite) --> $($siteStructure.values.Url)`n"
     }
   }
     
   # Prepare output and populate template
   $Binding = @{
-    sitemapContent    = $sitemapContent
+    sitemapContent   = $sitemapContent
     sitemapRelations = $sitemapRelations
   }
 
