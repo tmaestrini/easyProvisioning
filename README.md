@@ -5,8 +5,8 @@ Under the hood, the provisioning engine is powered by the [PnP.Powershell](https
 
 Give it a try – I'm sure you will have fun! 💪
 
-👉 SPO is currently the only targeted service in M365 – but other services 
-will follow asap. Any contributors are welcome! 🙌
+👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
+Any contributors are welcome! 🙌
 
 ## Installation
 ```powershell
