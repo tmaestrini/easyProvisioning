@@ -49,7 +49,7 @@ The resource provisioning process is idempotent; each defined resource or settin
 To get your resources provisioned, just write down the structure in one single YAML file.
 All you have to do is to make sure that your YAML file implements the following schema.
 
-Assuming the file is referenced as `standard.yml` (in the usage example above) that exists under the path `/templates`),
+Assuming the file is referenced as `standard.yml` (in the usage example above) and exists under the path `/templates`),
 a new SharePoint Communication Site named `One` will be created:
 
 ```yaml
