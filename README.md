@@ -45,9 +45,12 @@ Sync-Hubnavigation -TemplateName "standard.yml"
 The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
 
 
-## Template file
-To get your resources provisioned, just write them down in one single YAML file with the
-following structure (assuming the file is referenced as `standard.yml` in the usage example above) that exists under the path `/templates`):
+## The template file (YAML)
+To get your resources provisioned, just write down the structure in one single YAML file.
+All you have to do is to make sure that your YAML file implements the following schema.
+
+Assuming the file is referenced as `standard.yml` (in the usage example above) that exists under the path `/templates`),
+a new SharePoint Communication Site named `One` will be created:
 
 ```yaml
 Tenant: <your tenant name>
