@@ -13,25 +13,28 @@ Function Add-SPOStructure {
     Write-Host "⭐️ Creating site '$($SPOTemplateConfigStructure.keys)': " -NoNewline
     $atts = @{
       Title = $SPOTemplateConfigStructure.keys
-      Url   = "$($spoUrl)$($SPOTemplateConfigStructure.values.Url)"
+      Url   = "$($spoUrl)$($SPOTemplateConfigStructure.values.Url.TrimStart('/'))"
       Lcid  = $SPOTemplateConfigStructure.values.Lcid ?? 1031
     }
     
     # Create new site
     $createdSite = $null
     try {
-      switch ($SPOTemplateConfigStructure.values.Type) {
-        "Communication" { $createdSite = New-PnPSite -Wait -Type CommunicationSite @atts -SiteDesign $SPOTemplateConfigStructure.values.Template -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
-        "Team" { $createdSite = New-PnPSite -Wait -Type TeamSite @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
-        "SPOTeam" { $createdSite = New-PnPSite -Wait -Type TeamSiteWithoutMicrosoft365Group @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
-        Default {}
+      $createdSite = (Get-PnPTenantSite -Identity $atts.Url -Connection $global:SPOAdminConnection).Url
+      if ($null -eq $createdSite) {
+        switch ($SPOTemplateConfigStructure.values.Type) {
+          "Communication" { $createdSite = New-PnPSite -Wait -Type CommunicationSite @atts -SiteDesign $SPOTemplateConfigStructure.values.Template -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
+          "Team" { $createdSite = New-PnPSite -Wait -Type TeamSite @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
+          "SPOTeam" { $createdSite = New-PnPSite -Wait -Type TeamSiteWithoutMicrosoft365Group @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
+          Default { throw "Site type not matching" }
+        }
       }
-
       Write-Host $($createdSite) -NoNewline
       Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
     }
     catch {
-      Write-Host " ❌ failed: $($_)" -ForegroundColor Red      
+      Write-Host " ❌ failed: $($_)" -ForegroundColor Red
+      exit 1   
     }
 
     # Handle Hub association
@@ -85,20 +88,22 @@ Function Add-SPOStructure {
         Write-Host "⎿ Creating content <$($siteContent.keys)>: '$($siteContent.values.Title)'" -NoNewline
         $quickLaunch = $siteContent.values.OnQuickLaunch -and $siteContent.values.OnQuickLaunch -eq $true ? $true : $false
 
+        $objectUrl = ConvertTo-PascalCase $siteContent.values.Title
         switch ($siteContent.keys) {
-          "DocumentLibrary" { $list = New-PnPList -Template DocumentLibrary -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
+          "DocumentLibrary" { $list = New-PnPList -Template DocumentLibrary -Url $objectUrl -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
           "MediaLibrary" {
             # THis is a special media library by this provisioning engine 😍 
             Enable-PnPFeature -Identity 6e1e5426-2ebd-4871-8027-c5ca86371ead -Scope Site -Force -Connection $siteConnection # VideoAndRichMedia
             Enable-PnPFeature -Identity 4bcccd62-dcaf-46dc-a7d4-e38277ef33f4 -Scope Site -Force -Connection $siteConnection # Asset Library
             Enable-PnPFeature -Identity 3bae86a2-776d-499d-9db8-fa4cdc7884f8 -Scope Site -Force -Connection $siteConnection # Document Set
-            $list = New-PnPList -Template DocumentLibrary -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection 
+            
+            $list = New-PnPList -Template DocumentLibrary -Url $objectUrl -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection 
             Add-PnPContentTypeToList -List $list -ContentType 0x0101009148F5A04DDD49CBA7127AADA5FB792B -DefaultContentType -Connection $siteConnection 
             Add-PnPContentTypeToList -List $list -ContentType 0x0101009148F5A04DDD49CBA7127AADA5FB792B00291D173ECE694D56B19D111489C4369D -Connection $siteConnection 
             Add-PnPContentTypeToList -List $list -ContentType 0x0101009148F5A04DDD49CBA7127AADA5FB792B00AADE34325A8B49CDA8BB4DB53328F214 -Connection $siteConnection
           }
-          "List" { $list = New-PnPList -Template GenericList -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
-          "EventsList" { $list = New-PnPList -Template Events -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
+          "List" { $list = New-PnPList -Template GenericList -Url $objectUrl -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
+          "EventsList" { $list = New-PnPList -Template Events -Url $objectUrl -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
           Default {}
         }
 
@@ -133,7 +138,6 @@ Function Add-SPOStructure {
   # Create sites and content
   foreach ($siteStructure in $SPOTemplateConfig.Structure) {
     $newSiteConnection = New-Site -SPOTemplateConfigStructure $siteStructure
-$newSiteConnection
     if ($siteStructure.Values.HomepageLayout) {
       Set-HomepageLayout -siteConnection $newSiteConnection -SPOStructureSiteTemplateConfig $siteStructure
     }
