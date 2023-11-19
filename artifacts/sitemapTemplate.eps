@@ -1,5 +1,5 @@
 flowchart LR
-  %%{ init: { 'flowchart': { 'curve': 'linear' } } }%%
+  %%{init: { 'flowchart': { 'curve': 'linear' }, 'theme': 'base', 'themeVariables': { 'fontSize': '11px', 'fontFamily': 'Arial'}}}%%
 
   subgraph content [ ]
     %% Content
@@ -10,15 +10,18 @@ flowchart LR
   end
 
   subgraph legend [ ]
+    Hubsite("☆ Hub"):::Hubsite
     CommSite(Communication Site):::CommSite
     TeamSite[Team Site]:::TeamSite
-    SPOTeamSite>Team Site w/o M365 Group]:::SPOTeamSite
+    SPOTeamSite[Team Site w/o M365 Group]:::SPOTeamSite
   end
 
   %% Style definitions
-  classDef default fill:white, stroke:black, stroke-width:0.5px;
+  classDef default fill:white, stroke:black, stroke-width:0.5px, text-align:left;
   classDef CommSite fill:white;
   classDef TeamSite fill:white;
+  classDef SPOTeamSite fill:#eeeeee;
+  classDef Hubsite fill:white, stroke-width: 0px;
   classDef cluster fill:#fff,stroke:#bbb,stroke-width:0px,color:#326ce5;
   classDef legend fill:#fff,stroke:#bbb,stroke-width:1px,color:black,font-size:10px;
 
