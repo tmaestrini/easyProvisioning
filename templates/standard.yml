@@ -27,7 +27,7 @@ SharePoint:
           - DocumentLibrary: 
               Title: One
               OnQuickLaunch: True # optional; places a link in the quick launch navigation
-                Folders: # optional; generate a folder structure (items are folder names)
+                Folders: # optional; generates a folder structure (items are folder names)
                   - Alpha:
                       - Alpha.One:
                           - Alpha.One.1 [Demo 1]:

@@ -81,6 +81,21 @@ SharePoint:
           - DocumentLibrary: 
               Title: One
               OnQuickLaunch: True # optional; places a link in the quick launch navigation
+              Folders: # optional; generates a folder structure (items are folder names)
+                - Alpha:
+                    - Alpha.One:
+                        - Alpha.One.1 [Demo 1]:
+                            - One
+                    - Alpha.Two
+                    - Alpha.Three
+                - Beta:
+                    - Beta.One
+                    - Beta.Two:
+                        - Beta.Two.1
+                        - Beta.Two.2
+                        - Beta.Two.3
+                - Gamma          
+
           # creates a generic SPO list
           - List:  
               Title: Three
