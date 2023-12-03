@@ -15,7 +15,7 @@ Install-Module -Name PnP.PowerShell -RequiredVersion 2.2.0 -Scope CurrentUser
 ```
 
 
-## Minimal path to awesom
+## Minimal path to awesome
 ### Generate SharePoint structure
 The resource provisioning generally follows the structure that is defined by the YAML structure within the *template file* (see section below).
 Simply start the provisioning process by importing the `Provisioning.psm1` module and then calling the `Start-Provisioning` command as follows:
