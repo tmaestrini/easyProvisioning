@@ -84,6 +84,7 @@ Function Add-SPOStructure {
 
   Function Add-SiteContentOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [Object[]]$SPOTemplateContentConfig) {
     foreach ($siteContent in $SPOTemplateContentConfig) {
+      # Create libraries
       try {
         Write-Host "⎿ Creating content <$($siteContent.keys)>: '$($siteContent.values.Title)'" -NoNewline
         $quickLaunch = $siteContent.values.OnQuickLaunch -and $siteContent.values.OnQuickLaunch -eq $true ? $true : $false
@@ -113,9 +114,9 @@ Function Add-SPOStructure {
         Write-Host " ❌ failed: $($_)" -ForegroundColor Red
       }
 
+      # Create folder structure (if defined)
       try {
-        # Create folder structure (if defined)
-        if ($siteContent.keys -eq "DocumentLibrary" -and $siteContent.values.Folders) { 
+        if (($siteContent.keys -eq "DocumentLibrary" -or $siteContent.keys -eq "MediaLibrary") -and $siteContent.values.Folders) { 
           Write-Host "⎿ Creating folder structure:" -NoNewline
           Add-FoldersToList -siteConnection $siteConnection -ContentDoclibFolders $siteContent.values.Folders `
             -parentPath "$objectUrl" #-WhatIf

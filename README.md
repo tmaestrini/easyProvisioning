@@ -107,7 +107,20 @@ SharePoint:
           - MediaLibrary:
               Title: Five
               OnQuickLaunch: True
-    
+              Folders: # optional; generates a folder structure (items are folder names)
+                - Alpha:
+                    - Alpha.One:
+                        - Alpha.One.1 [Demo 1]:
+                            - One
+                    - Alpha.Two
+                    - Alpha.Three
+                - Beta:
+                    - Beta.One
+                    - Beta.Two:
+                        - Beta.Two.1
+                        - Beta.Two.2
+                        - Beta.Two.3
+                - Gamma          
     # define the next sites (as many sites as you like)...
     # - Two: ...
 ```
