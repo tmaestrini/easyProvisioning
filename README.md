@@ -70,7 +70,6 @@ SharePoint:
         Template: Blank 
         Site Admins: # optional
         Lcid: 1031  # optional; set to 1031 by default
-        Site Admins:  # optional
         HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
         IsHub: true  # optional
         ConnectedHubsite:  # optional
