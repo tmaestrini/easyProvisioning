@@ -30,7 +30,7 @@ Any contributors are welcome! 🙌
 ## Version history
 
 | Version | Date           | Comments        |
-| ------- | -------------- | --------------- |
+| ------- | :------------- | :-------------- |
 | 1.0     | December, 2023 | Initial release |
 
 
