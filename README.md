@@ -8,14 +8,45 @@ Give it a try – I'm sure you will like it! 💪
 👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
 Any contributors are welcome! 🙌
 
-## Installation
+
+## Dependencies
+![PnP.PowerShell](https://img.shields.io/badge/PnP.Powershell-2.2.0-green.svg) 
+
+
+## Applies to
+- [SharePoint Online](https://learn.microsoft.com/en-us/office365/servicedescriptions/sharepoint-online-service-description/sharepoint-online-service-description)
+- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
+
+> Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
+
+
+## Solution
+
+| Solution         | Author(s)                                                                                   |
+| ---------------- | ------------------------------------------------------------------------------------------- |
+| easyProvisioning | Tobias Maestrini (bee365 / adesso Schweiz ag) [@tmaestrini](https://twitter.com/tmaestrini) |
+
+
+## Version history
+
+| Version | Date           | Comments        |
+| ------- | -------------- | --------------- |
+| 1.0     | December, 2023 | Initial release |
+
+
+## Disclaimer
+
+**THIS CODE IS PROVIDED _AS IS_ WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
+
+---
+
+## Minimal path to awesome
+### Installation
 ```powershell
 Install-Module -Name powershell-yaml -Scope CurrentUser
 Install-Module -Name PnP.PowerShell -RequiredVersion 2.2.0 -Scope CurrentUser
 ```
 
-
-## Minimal path to awesome
 ### Generate SharePoint structure
 The resource provisioning generally follows the structure that is defined by the YAML structure within the *template file* (for reference: see section below).
 Simply start the provisioning process by importing the `Provisioning.psm1` module and then calling the `Start-Provisioning` command as follows:
