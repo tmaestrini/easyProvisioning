@@ -31,7 +31,7 @@ Any contributors are welcome! 🙌
 
 | Version | Date           | Comments        |
 | ------- | :------------- | :-------------- |
-| 1.0     | December, 2023 | Initial release |
+| 1.0     | November, 2023 | Initial release |
 
 
 ## Disclaimer
