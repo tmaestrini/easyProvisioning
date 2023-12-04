@@ -3,7 +3,7 @@
 
 Under the hood, the provisioning engine is powered by the [PnP.Powershell](https://pnp.github.io/powershell/) module and the [PnPProvisioning concept](https://github.com/pnp/PnP-Provisioning-Schema). This provides us with a powerful toolset for setting up and managing all resources that need to be provisioned within M365.
 
-Give it a try – I'm sure you will have fun! 💪
+Give it a try – I'm sure you will like it! 💪
 
 👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
 Any contributors are welcome! 🙌
