@@ -17,7 +17,7 @@ Install-Module -Name PnP.PowerShell -RequiredVersion 2.2.0 -Scope CurrentUser
 
 ## Minimal path to awesome
 ### Generate SharePoint structure
-The resource provisioning generally follows the structure that is defined by the YAML structure within the *template file* (see section below).
+The resource provisioning generally follows the structure that is defined by the YAML structure within the *template file* (for reference: see section below).
 Simply start the provisioning process by importing the `Provisioning.psm1` module and then calling the `Start-Provisioning` command as follows:
 
 ```powershell
@@ -43,6 +43,19 @@ Sync-Hubnavigation -TemplateName "standard.yml"
 ```
 
 The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
+
+### Create a folder structure for a given site
+You can define any folder structure in a given site. While running the regular provisioning setup (see paragraph «Generate SharePoint structure»), a given folder structure will be created along its optional `Folder` definition in the site scope.
+
+Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step. Make sure establish a connection to the destination site before you start the generation of the folder structure:
+
+```powershell
+$siteConn = Connect-PnPOnline "https://lamarotte.sharepoint.com/sites/TestZwei" -Interactive -ReturnConnection
+Import-Module .\src\Provisioning.psm1 -Force
+Add-FolderStructureToLibrary -TemplateName "lamarotte.yml" -siteConnection $siteConn
+```
+The resource provisioning process is idempotent; each defined folder is only provisioned once. You can run the process as many times you want without expecting any side effects!
+
 
 
 ## The template file (YAML)
