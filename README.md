@@ -81,9 +81,9 @@ You can define any folder structure in a given site. While running the regular p
 Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step. Make sure establish a connection to the destination site before you start the generation of the folder structure:
 
 ```powershell
-$siteConn = Connect-PnPOnline "https://lamarotte.sharepoint.com/sites/TestZwei" -Interactive -ReturnConnection
+$siteConn = Connect-PnPOnline "https://yourtenant.sharepoint.com/sites/site" -Interactive -ReturnConnection
 Import-Module .\src\Provisioning.psm1 -Force
-Add-FolderStructureToLibrary -TemplateName "lamarotte.yml" -siteConnection $siteConn
+Add-FolderStructureToLibrary -TemplateName "standard.yml" -siteConnection $siteConn
 ```
 The resource provisioning process is idempotent; each defined folder is only provisioned once. You can run the process as many times you want without expecting any side effects!
 
