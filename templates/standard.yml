@@ -1,8 +1,8 @@
-Tenant: <your tenant name>
+Tenant: <your tenant name> # name can be set according to your needs
 
 # Sharepoint Specific Settings
 SharePoint:
-  TenantId: <the SharePoint tenant id>
+  TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso)
   AdminUpn: <the admin's UPN>
 
   Structure:
@@ -15,7 +15,6 @@ SharePoint:
         Template: Blank 
         Site Admins: # optional
         Lcid: 1031  # optional; set to 1031 by default
-        Site Admins:  # optional
         HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
         IsHub: true  # optional
         ConnectedHubsite:  # optional
