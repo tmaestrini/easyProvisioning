@@ -97,11 +97,11 @@ Assuming the file is referenced as `standard.yml` (in the usage example above) a
 a new SharePoint Communication Site named `One` will be created:
 
 ```yaml
-Tenant: <your tenant name>
+Tenant: <your tenant name> # name can be set according to your needs
 
 # Sharepoint Specific Settings
 SharePoint:
-  TenantId: <the SharePoint tenant id>
+  TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso)
   AdminUpn: <the admin's UPN>
 
   Structure:
