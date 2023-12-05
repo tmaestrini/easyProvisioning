@@ -12,11 +12,13 @@ function New-MermaidSitemap {
   $sitemapRelations = @()
 
   foreach ($siteStructure in $Template.SharePoint.Structure) {
-    $node = $siteStructure.values.Type -eq 'Communication' ? "$($siteStructure.values.Url)(""%content%""):::CommSite" 
-    : $siteStructure.values.Type -eq 'Team' ? "$($siteStructure.values.Url)[""%content%""]:::TeamSite" 
-    : "$($siteStructure.values.Url)[""%content%""]:::SPOTeamSite"
-    $node = $siteStructure.values.IsHub -eq $true ? $node.Replace('%content%', '☆ %content%') : $node
-    $node = $node.Replace('%content%', "<strong>$($siteStructure.keys)</strong><br/><hr/><small>▷$($siteStructure.values.Url)</small><div style='font-size: 0.8em;display:flex;flex-direction:column;line-height:1em'>%content%</div>")
+    # handle site header in new node
+    $node = $siteStructure.values.Type -eq 'Communication' ? "$($siteStructure.values.Url)(""%header%""):::CommSite" 
+    : $siteStructure.values.Type -eq 'Team' ? "$($siteStructure.values.Url)[""%header%""]:::TeamSite" 
+    : "$($siteStructure.values.Url)[""%header%""]:::SPOTeamSite"
+    $node = $siteStructure.values.IsHub -eq $true ? $node.Replace('%header%', '☆ %header%') : $node
+    $node = $node.Replace('%header%', "<strong>$($siteStructure.keys)</strong><br/><hr/>%url%")
+    $node = $node.Replace('%url%', "<small>▷$($siteStructure.values.Url)</small><div style='font-size: 0.8em;display:flex;flex-direction:column;line-height:1em'>%content%</div>")
     
     # handle site content
     foreach ($siteContent in $siteStructure.values.Content) {
@@ -26,10 +28,12 @@ function New-MermaidSitemap {
     $node = $node.Replace('%content%', "") 
     
     # node is ready – add it to site map
-    $sitemapContent += "$node`n"
+    $spacing = ($sitemapContent.Length -eq 0) ? "" : "`n    "
+    $sitemapContent += "$spacing$node"
     
     if ($siteStructure.values.ConnectedHubsite) {
-      $sitemapRelations += "$($siteStructure.values.ConnectedHubsite) --> $($siteStructure.values.Url)`n"
+      $spacing = ($sitemapRelations.Length -eq 0) ? "" : "`n    "
+      $sitemapRelations += "$spacing$($siteStructure.values.ConnectedHubsite) --> $($siteStructure.values.Url)"
     }
   }
     
