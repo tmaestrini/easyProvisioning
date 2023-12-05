@@ -20,7 +20,7 @@ Function Add-SPOStructure {
     # Create new site
     $createdSite = $null
     try {
-      $createdSite = (Get-PnPTenantSite -Identity $atts.Url -Connection $global:SPOAdminConnection).Url
+      $createdSite = (Get-PnPTenantSite -Identity $atts.Url -Connection $global:SPOAdminConnection -ErrorAction SilentlyContinue).Url
       if ($null -eq $createdSite) {
         switch ($SPOTemplateConfigStructure.values.Type) {
           "Communication" { $createdSite = New-PnPSite -Wait -Type CommunicationSite @atts -SiteDesign $SPOTemplateConfigStructure.values.Template -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
