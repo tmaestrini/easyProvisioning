@@ -61,6 +61,19 @@ Test-Template -TemplateName "standard.yml"
 
 The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the provisioning process as many times you want without expecting any side effects!
 
+### Generate a sitemap for a SharePoint structure
+For visualization purposes, the defined structure from the *template file* (see section below) can be processed into a sitemap diagram. This can be very useful in order to verify a defined structure before starting the actual provisioining process.
+
+After the generation process has terminated, a new file the ending `.sitemap.mmd` will be created at the same location as the *template file* resides. The file contains the body of a [*Mermaid* diagram](https://mermaid.js.org/). The sitemap can easily be visualized by making use of an appropriate `mermaid` visualization library or by pasting the file content in the [Mermaid Live Editor](https://mermaid.live/).
+
+The following snippet generates a new *Mermaid* sitemap body in the file `standard.sitemap.mmd`:
+
+```powershell
+Import-Module .\src\Provisioning.psm1 -Force
+New-Sitemap -TemplateName "standard.yml" -Type Mermaid # the sitemap file 'standard.sitemap.mmd'
+```
+The generating process is idempotent; You can run the process as many times you want without expecting any side effects!
+
 ### Sync hub navigation from template site
 You can sync any given hub navigation to any given site. Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed again in a separate step.
 
