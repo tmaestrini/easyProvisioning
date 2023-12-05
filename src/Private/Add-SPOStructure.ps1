@@ -20,7 +20,7 @@ Function Add-SPOStructure {
     # Create new site
     $createdSite = $null
     try {
-      $createdSite = (Get-PnPTenantSite -Identity $atts.Url -Connection $global:SPOAdminConnection).Url
+      $createdSite = (Get-PnPTenantSite -Identity $atts.Url -Connection $global:SPOAdminConnection -ErrorAction SilentlyContinue).Url
       if ($null -eq $createdSite) {
         switch ($SPOTemplateConfigStructure.values.Type) {
           "Communication" { $createdSite = New-PnPSite -Wait -Type CommunicationSite @atts -SiteDesign $SPOTemplateConfigStructure.values.Template -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
@@ -84,6 +84,7 @@ Function Add-SPOStructure {
 
   Function Add-SiteContentOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [Object[]]$SPOTemplateContentConfig) {
     foreach ($siteContent in $SPOTemplateContentConfig) {
+      # Create libraries
       try {
         Write-Host "⎿ Creating content <$($siteContent.keys)>: '$($siteContent.values.Title)'" -NoNewline
         $quickLaunch = $siteContent.values.OnQuickLaunch -and $siteContent.values.OnQuickLaunch -eq $true ? $true : $false
@@ -92,7 +93,7 @@ Function Add-SPOStructure {
         switch ($siteContent.keys) {
           "DocumentLibrary" { $list = New-PnPList -Template DocumentLibrary -Url $objectUrl -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
           "MediaLibrary" {
-            # THis is a special media library by this provisioning engine 😍 
+            # This is a special media library by this provisioning engine 😍 
             Enable-PnPFeature -Identity 6e1e5426-2ebd-4871-8027-c5ca86371ead -Scope Site -Force -Connection $siteConnection # VideoAndRichMedia
             Enable-PnPFeature -Identity 4bcccd62-dcaf-46dc-a7d4-e38277ef33f4 -Scope Site -Force -Connection $siteConnection # Asset Library
             Enable-PnPFeature -Identity 3bae86a2-776d-499d-9db8-fa4cdc7884f8 -Scope Site -Force -Connection $siteConnection # Document Set
@@ -106,8 +107,21 @@ Function Add-SPOStructure {
           "EventsList" { $list = New-PnPList -Template Events -Url $objectUrl -Title $siteContent.values.Title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
           Default {}
         }
-
+        
         Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
+      }
+      catch {
+        Write-Host " ❌ failed: $($_)" -ForegroundColor Red
+      }
+
+      # Create folder structure (if defined)
+      try {
+        if (($siteContent.keys -eq "DocumentLibrary" -or $siteContent.keys -eq "MediaLibrary") -and $siteContent.values.Folders) { 
+          Write-Host "⎿ Creating folder structure:" -NoNewline
+          Add-FoldersToList -siteConnection $siteConnection -ContentDoclibFolders $siteContent.values.Folders `
+            -parentPath "$objectUrl" #-WhatIf
+          Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
+        } 
       }
       catch {
         Write-Host " ❌ failed: $($_)" -ForegroundColor Red
