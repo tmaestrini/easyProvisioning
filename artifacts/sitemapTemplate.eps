@@ -1,7 +1,7 @@
 flowchart LR
   %%{init: { 'flowchart': { 'curve': 'linear' }, 'theme': 'base', 'themeVariables': { 'fontSize': '11px', 'fontFamily': 'Arial'}}}%%
 
-  subgraph content [ ]
+  subgraph content [ ]
     %% Content
     <%= $sitemapContent %>
     
@@ -9,7 +9,7 @@ flowchart LR
     <%= $sitemapRelations %>
   end
 
-  subgraph legend [ ]
+  subgraph legend [ ]
     Hubsite("☆ Hub"):::Hubsite
     CommSite(Communication Site):::CommSite
     TeamSite[Team Site]:::TeamSite
