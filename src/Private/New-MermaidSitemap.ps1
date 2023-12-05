@@ -3,23 +3,18 @@ function New-MermaidSitemap {
   param(
     [Parameter(
       Mandatory = $true,
-      HelpMessage = "Full name of the template, including .yml (aka <name>.yml)"
-    )][string]$TemplateName
+      HelpMessage = "The template (acts as sitemap source)"
+    )][hashtable]$Template  
   )
-
-  $template = Get-Template -TemplateName $TemplateName
-  if ($null -eq $template.SharePoint.TenantId) { throw "No SharePoint tenant id provided" }
-  if ($null -eq $template.SharePoint.Structure) { throw "No SharePoint Structure provided" }
   
   # Create sites and content
   $sitemapContent = @()
   $sitemapRelations = @()
-  $sitemapHubsites = @()
 
-  foreach ($siteStructure in $template.SharePoint.Structure) {
+  foreach ($siteStructure in $Template.SharePoint.Structure) {
     $node = $siteStructure.values.Type -eq 'Communication' ? "$($siteStructure.values.Url)(""%content%""):::CommSite" 
-      : $siteStructure.values.Type -eq 'Team' ? "$($siteStructure.values.Url)[""%content%""]:::TeamSite" 
-      : "$($siteStructure.values.Url)[""%content%""]:::SPOTeamSite"
+    : $siteStructure.values.Type -eq 'Team' ? "$($siteStructure.values.Url)[""%content%""]:::TeamSite" 
+    : "$($siteStructure.values.Url)[""%content%""]:::SPOTeamSite"
     $node = $siteStructure.values.IsHub -eq $true ? $node.Replace('%content%', '☆ %content%') : $node
     $node = $node.Replace('%content%', "<strong>$($siteStructure.keys)</strong><br/><hr/><small>▷$($siteStructure.values.Url)</small><div style='font-size: 0.8em;display:flex;flex-direction:column;line-height:1em'>%content%</div>")
     

@@ -13,7 +13,7 @@ function New-Sitemap {
   if ($null -eq $template.SharePoint.Structure) { throw "No SharePoint Structure provided" }
 
   switch ($Type) {
-    'Mermaid' { New-MermaidSitemap -TemplateName $TemplateName }
+    'Mermaid' { New-MermaidSitemap -Template $template }
     Default {}
   }
 }
