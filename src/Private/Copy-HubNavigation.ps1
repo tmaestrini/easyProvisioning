@@ -52,7 +52,7 @@ Function Copy-Hubnavigation {
     # Delete all existing nodes:
     Remove-PnPNavigationNode -Force -All -Connection $connHubSiteDest
 
-    Write-Host "⎿ Applying consistent hub navigation from '$($connHubsiteSource.Url)' as a copy: " -NoNewline
+    Write-Host "⎿  Copying consistent hub navigation from '$($connHubsiteSource.Url)': " -NoNewline
     $navigation = Get-ToplevelHubnavigation -sourceSiteConn $connHubsiteSource
     foreach ($naviItem in $navigation) {
       # get the details about the node:
