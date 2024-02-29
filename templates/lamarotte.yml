@@ -1,0 +1,153 @@
+Tenant: lamarotte
+
+# Sharepoint Specific Settings
+SharePoint:
+  TenantId: lamarotte
+  AdminUpn: administrator.maestrini@lamarotte.ch
+  
+  Structure:
+    # # Administration
+    # - Administration:
+    #     Url: /sites/Administration
+    #     Type: Communication
+    #     Template: Blank
+    #     IsHub: true
+    # - Finanzen:
+    #     Url: /sites/Finanzen
+    #     Type: Team
+    #     ConnectedHubsite: /sites/Administration
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Buchhaltung
+    #       - DocumentLibrary:
+    #           Title: Organisation
+    # - IT:
+    #     Url: /sites/IT
+    #     Type: Team
+    #     ConnectedHubsite: /sites/Administration
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Organisation
+    #       - DocumentLibrary:
+    #           Title: Handbücher & Dokumente
+    # - Vorlagen:
+    #     Url: /sites/Vorlagen
+    #     Type: Communication
+    #     ConnectedHubsite: /sites/Administration
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Formulare
+    #       - DocumentLibrary:
+    #           Title: Grafiken
+    #       - DocumentLibrary:
+    #           Title: Archiv
+    # # Betrieb
+    # - Betrieb:
+    #     Url: /sites/Betrieb
+    #     Type: Communication
+    #     Template: Blank
+    #     IsHub: true
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Organisation
+    #       - DocumentLibrary:
+    #           Title: Handbücher
+    # - Programm:
+    #     Url: /sites/Programm
+    #     Type: Communication
+    #     Template: Blank
+    #     ConnectedHubsite: /sites/Betrieb
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Organisation
+    #       - DocumentLibrary:
+    #           Title: Anlässe (Planung)
+    #       - DocumentLibrary:
+    #           Title: Events (Durchführung)
+    #       - DocumentLibrary:
+    #           Title: Archiv
+    # # Verein
+    # - Verein:
+    #     Url: /sites/Verein
+    #     Type: Communication
+    #     Template: Blank
+    #     IsHub: true
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Organisation
+    #       - DocumentLibrary:
+    #           Title: Mitgliederversammlung
+    #       - DocumentLibrary:
+    #           Title: Archiv
+    # - Verein · Vorstand:
+    #     Url: /sites/Vorstand
+    #     Type: Team
+    #     ConnectedHubsite: /sites/Verein
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Organisation
+    # - Verein · Projekte:
+    #     Url: /sites/Projekte
+    #     Type: Communication
+    #     ConnectedHubsite: /sites/Verein
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Organisation
+    #       - DocumentLibrary:
+    #           Title: Archiv
+    # - Organisationshandbuch:
+    #     Url: /sites/OHB
+    #     Type: Communication
+    #     ConnectedHubsite: /sites/Verein
+
+    # # Test
+    # - Eins:
+    #     Url: /sites/TestEins
+    #     Type: Communication
+    #     Template: Blank
+    #     Lcid: 1031
+    #     Site Admins: 
+    #     IsHub: true
+    #     HomepageLayout: Home
+    #     CopyHubNavigation: /
+    #     Provisioning Template: 
+    #     Content:
+    #       - DocumentLibrary:
+    #           Title: Eins
+    #       - List:  
+    #           Title: Zwei
+    #           OnQuickLaunch: True
+    #       - EventsList:
+    #           Title: Drei
+    #           OnQuickLaunch: True
+    #       - MediaLibrary:
+    #           Title: Vier
+    #           OnQuickLaunch: True
+    - Zwei:
+        Url: /sites/TestZwei
+        Type: Communication
+        Template: Blank
+        Site Admins: 
+        Provisioning Template:
+        SharingCapability: ExistingExternalUserSharingOnly
+        IsHub: true
+        CopyHubNavigation: /
+        Content:
+            - DocumentLibrary:
+                Title: Test Library 1
+                Folders:
+                  - Alpha:
+                      - Alpha.One:
+                          - Alpha.One.1 [Demo 1]:
+                              - One
+                      - Alpha.Two
+                      - Alpha.Three
+                  - Beta:
+                      - Beta.One
+                      - Beta.Two:
+                          - Beta.Two.1
+                          - Beta.Two.2
+                          - Beta.Two.3
+                      - Beta.Three
+
+                  - Gamma
