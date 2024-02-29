@@ -47,8 +47,6 @@ Function Copy-Hubnavigation {
 
   $connHubsiteSource = Connect-PnPOnline -Url $spoUrlSource -ReturnConnection -Interactive
   $connHubSiteDest = Connect-PnPOnline -Url $spoUrlDestination -Interactive -ReturnConnection
-  # $connHubsiteSource = Connect-PnPOnline -Url "https://lamarotte.sharepoint.com/" -ReturnConnection -Interactive
-  # $connHubSiteDest = Connect-PnPOnline -Url "https://lamarotte.sharepoint.com/sites/Verein" -Interactive -ReturnConnection
 
   try {
     # Delete all existing nodes:
