@@ -5,8 +5,9 @@ Under the hood, the provisioning engine is powered by the [PnP.Powershell](https
 
 Give it a try – I'm sure you will like it! 💪
 
-👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
-Any contributors are welcome! 🙌
+> [!NOTE]
+> 👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
+> Any contributors are welcome! 🙌
 
 
 ## Dependencies
@@ -73,7 +74,9 @@ Import-Module .\src\Provisioning.psm1 -Force
 Sync-Hubnavigation -TemplateName "standard.yml"
 ```
 
-The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
+> [!NOTE]
+>  The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
+
 
 ### Create a folder structure for a given site
 You can define any folder structure in a given site. While running the regular provisioning setup (see paragraph «Generate SharePoint structure»), a given folder structure will be created along its optional `Folder` definition in the site scope.
@@ -85,7 +88,8 @@ $siteConn = Connect-PnPOnline "https://yourtenant.sharepoint.com/sites/site" -In
 Import-Module .\src\Provisioning.psm1 -Force
 Add-FolderStructureToLibrary -TemplateName "standard.yml" -siteConnection $siteConn
 ```
-The resource provisioning process is idempotent; each defined folder is only provisioned once. You can run the process as many times you want without expecting any side effects!
+> [!NOTE]
+> The resource provisioning process is idempotent; each defined folder is only provisioned once. You can run the process as many times you want without expecting any side effects!
 
 
 
