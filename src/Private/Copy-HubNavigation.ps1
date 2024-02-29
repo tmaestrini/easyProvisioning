@@ -21,7 +21,7 @@ Function Copy-Hubnavigation {
 
   Function New-HubnavigationElement([Object]$naviItem, [Object]$parentItem, [PnP.PowerShell.Commands.Base.PnPConnection]$destSiteConn, [PnP.PowerShell.Commands.Base.PnPConnection]$sourceSiteConn) {
     # construct path based on given relative url of item
-    $naviItem.Url = $naviItem.Url -eq "http://linkless.header/" ? "http://linkless.header/" : "$($naviItem.Context.Url)$($naviItem.Url.TrimStart('/'))"
+    $naviItem.Url = $naviItem.Url -eq "http://linkless.header/" ? "http://linkless.header/" : ($naviItem.Url.StartsWith("https://") ? $naviItem.Url : "$($naviItem.Context.Url)$($naviItem.Url.TrimStart('/'))")
     if ($null -ne $parentItem) {
       $node = Add-PnPNavigationNode -Location TopNavigationBar -Title $naviItem.Title -Url $naviItem.Url -Parent $parentItem.Id -Connection $destSiteConn
     }
