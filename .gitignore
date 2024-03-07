@@ -7,7 +7,9 @@ logs
 .vscode/
 
 # Configurations
-
+templates/*
+!templates/standard.yml
+!templates/standard-ppl.yml
 
 # Temporary files
 cache
