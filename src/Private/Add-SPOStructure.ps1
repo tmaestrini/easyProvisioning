@@ -23,7 +23,10 @@ Function Add-SPOStructure {
       $createdSite = (Get-PnPTenantSite -Identity $atts.Url -Connection $global:SPOAdminConnection -ErrorAction SilentlyContinue).Url
       if ($null -eq $createdSite) {
         switch ($SPOTemplateConfigStructure.values.Type) {
-          "Communication" { $createdSite = New-PnPSite -Wait -Type CommunicationSite @atts -SiteDesign $SPOTemplateConfigStructure.values.Template -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
+          "Communication" { 
+            $siteDesign = $null -eq $SPOTemplateConfigStructure.values.Template ? "Blank" : $SPOTemplateConfigStructure.values.Template
+            $atts.SiteDesign = $siteDesign
+            $createdSite = New-PnPSite -Wait -Type CommunicationSite @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
           "Team" { $createdSite = New-PnPSite -Wait -Type TeamSite @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
           "SPOTeam" { $createdSite = New-PnPSite -Wait -Type TeamSiteWithoutMicrosoft365Group @atts -TimeZone UTCPLUS0100_AMSTERDAM_BERLIN_BERN_ROME_STOCKHOLM_VIENNA -Connection $global:SPOAdminConnection }
           Default { throw "Site type not matching" }
@@ -171,13 +174,12 @@ Function Add-SPOStructure {
       Set-HomepageLayout -siteConnection $newSiteConnection -SPOStructureSiteTemplateConfig $siteStructure
     }
     
-    Add-SiteContentOnTarget -siteConnection $newSiteConnection -SPOTemplateContentConfig $siteStructure.Values.Content
-
+    Add-SiteContentOnTarget -siteConnection $newSiteConnection -SPOTemplateContentConfig $siteStructure.Values.Content -ErrorAction SilentlyContinue
     if ($siteStructure.Values.'Provisioning Template') {
       Invoke-PnPSiteTemplateOnTarget -templatePath $siteStructure.Values.'Provisioning Template' -templateParameters $siteStructure.Values.'Provisioning Parameters'`
-        -siteConnection $newSiteConnection 
+      -siteConnection $newSiteConnection 
     }
-
+    
     if ($siteStructure.Values.CopyHubNavigation) {
       Copy-Hubnavigation -SPOStructureSiteTemplateConfig $siteStructure -SPOBaseUrl $spoUrl
     }
