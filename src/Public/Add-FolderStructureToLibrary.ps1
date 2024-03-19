@@ -24,7 +24,7 @@ function Add-FolderStructureToLibrary {
           Write-Host "⭐️ $($siteContent.Values.Title) – creating folder structure:" -NoNewline
           $objectUrl = ConvertTo-PascalCase $siteContent.values.Title
           Add-FoldersToList -ContentDoclibFolders $siteContent.values.Folders `
-            -parentPath "$objectUrl" -siteConnection $siteConnection #-WhatIf
+            -parentPath "$objectUrl" -siteConnection $siteConnection -WhatIf:$WhatIf
           Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
         }
       }
