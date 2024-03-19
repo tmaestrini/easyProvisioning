@@ -3,14 +3,14 @@ Function Add-FoldersToList([PnP.PowerShell.Commands.Base.PnPConnection]$siteConn
     try {
       # 👇 leaf with subfolder structure
       if ($folder -is [System.Collections.Hashtable]) {
-        if ($WhatIf.IsPresent) { "$parentPath/$($folder.Keys)" }
+        if ($WhatIf.IsPresent) { Write-Host "`n$parentPath/$($folder.Keys)" -NoNewline }
         else { $f = Add-PnPFolder -Name $folder.Keys -Folder $parentPath -Connection $siteConnection -ErrorAction SilentlyContinue }
         Add-FoldersToList -ContentDoclibFolders $folder.values -parentPath "$parentPath/$($folder.Keys)" `
           -siteConnection $siteConnection -WhatIf:$WhatIf 
       }
       # 👇 Simple leaf with no subfolders
       elseif ($folder -is [string]) {
-        if ($WhatIf.IsPresent) { "$parentPath/$folder" }
+        if ($WhatIf.IsPresent) { Write-Host "`n$parentPath/$folder" -NoNewline }
         else { $f = Add-PnPFolder -Name $folder -Folder $parentPath -Connection $siteConnection -ErrorAction SilentlyContinue }
       }
       # 👇 subfolder structure
@@ -18,14 +18,14 @@ Function Add-FoldersToList([PnP.PowerShell.Commands.Base.PnPConnection]$siteConn
         foreach ($item in $folder) {
           # contains more folders
           if ($item.Values) { 
-            if ($WhatIf.IsPresent) { "$parentPath/$($item.Keys)" }
+            if ($WhatIf.IsPresent) { Write-Host "`n$parentPath/$($item.Keys)" -NoNewline}
             else { $f = Add-PnPFolder -Name $item.Keys -Folder $parentPath -Connection $siteConnection -ErrorAction SilentlyContinue }
             Add-FoldersToList -ContentDoclibFolders $item.Values -parentPath "$parentPath/$($item.Keys)" `
               -siteConnection $siteConnection -WhatIf:$WhatIf
           }
           # 👇 simple leaf with no subfolders
           else {
-            if ($WhatIf.IsPresent) { "$parentPath/$($item)" }
+            if ($WhatIf.IsPresent) { Write-Host "`n$parentPath/$($item)" -NoNewline }
             else { $f = Add-PnPFolder -Name $item -Folder $parentPath -Connection $siteConnection -ErrorAction SilentlyContinue }
           }
         }
