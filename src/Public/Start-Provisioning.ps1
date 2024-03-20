@@ -11,6 +11,7 @@ Function Start-Provisioning {
   )
 
   try {
+    Clear-Host
     $template = Get-Template -TemplateName $TemplateName
     Add-SPOStructure -SPOTemplateConfig $template.SharePoint -KeepConnectionsAlive:$KeepConnectionsAlive
   }
