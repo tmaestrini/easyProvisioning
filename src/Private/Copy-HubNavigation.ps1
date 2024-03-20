@@ -15,7 +15,7 @@ Function Copy-Hubnavigation {
       return $hubsiteNavigation
     }
     catch {
-      Write-Host " ❌ failed: $($_)" -ForegroundColor Red
+      Write-Host " ✘ failed: $($_)" -ForegroundColor Red
     }
   }
 
@@ -39,11 +39,11 @@ Function Copy-Hubnavigation {
     }     
   }
 
-  if ($null -eq $SPOStructureSiteTemplateConfig.Values.CopyHubNavigation) { throw "No Source Hubsite Url provided" }
-  if ($null -eq $SPOStructureSiteTemplateConfig.Values.Url) { throw "No Destination Hubsite Url provided" }
+  if ($null -eq $SPOStructureSiteTemplateConfig.CopyHubNavigation) { throw "No Source Hubsite Url provided" }
+  if ($null -eq $SPOStructureSiteTemplateConfig.Url) { throw "No Destination Hubsite Url provided" }
   
-  $spoUrlSource = "$($SPOBaseUrl)$($SPOStructureSiteTemplateConfig.Values.CopyHubNavigation)"
-  $spoUrlDestination = "$($SPOBaseUrl)$($SPOStructureSiteTemplateConfig.Values.Url)"
+  $spoUrlSource = "$($SPOBaseUrl)$($SPOStructureSiteTemplateConfig.CopyHubNavigation)"
+  $spoUrlDestination = "$($SPOBaseUrl)$($SPOStructureSiteTemplateConfig.Url)"
 
   $connHubsiteSource = Connect-PnPOnline -Url $spoUrlSource -ReturnConnection -Interactive
   $connHubSiteDest = Connect-PnPOnline -Url $spoUrlDestination -Interactive -ReturnConnection
@@ -62,7 +62,7 @@ Function Copy-Hubnavigation {
     Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
   }
   catch {
-    Write-Host " ❌ failed: $($_)" -ForegroundColor Red
+    Write-Host " ✘ failed: $($_)" -ForegroundColor Red
   }
 
 }

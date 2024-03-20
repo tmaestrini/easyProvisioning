@@ -15,6 +15,6 @@ Function Start-Provisioning {
     Add-SPOStructure -SPOTemplateConfig $template.SharePoint -KeepConnectionsAlive:$KeepConnectionsAlive
   }
   catch {
-    $_
+    Write-Error "$($_.Exception.Message)`n$($_.Exception.StackTrace)"
   }
 }
