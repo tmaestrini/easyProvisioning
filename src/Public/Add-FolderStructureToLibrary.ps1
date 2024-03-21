@@ -19,8 +19,14 @@ function Add-FolderStructureToLibrary {
 
   try {
     foreach ($siteStructure in $template.SharePoint.Structure) {
-      foreach ($siteContent in $siteStructure.values.Content) {
-        if ($null -ne $siteContent.values.Folders) {
+      foreach ($siteContent in $siteStructure.Content) {
+        if ($null -ne $siteContent.Folders) {
+          $type = $SPOTemplateConfigStructure.Hub ? "Hub" : $SPOTemplateConfigStructure.Site ? "Site" : $null
+          if ($null -eq $type) { throw "No or wrong site type provided" }
+  
+          $title = $SPOTemplateConfigStructure[$type]
+          $isHub = $type -eq "Hub"
+      
           Write-Host "⭐️ $($siteContent.Values.Title) – creating folder structure:" -NoNewline
           $objectUrl = ConvertTo-PascalCase $siteContent.values.Title
           Add-FoldersToList -ContentDoclibFolders $siteContent.values.Folders `

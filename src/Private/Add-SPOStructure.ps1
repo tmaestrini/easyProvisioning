@@ -10,7 +10,9 @@ Function Add-SPOStructure {
   )
 
   Function New-Site([hashtable]$SPOTemplateConfigStructure) {
-    $type = $SPOTemplateConfigStructure.Hub ? "Hub" : "Site"
+    $type = $SPOTemplateConfigStructure.Hub ? "Hub" : $SPOTemplateConfigStructure.Site ? "Site" : $null
+    if ($null -eq $type) { throw "No or wrong site type provided" }
+
     $title = $SPOTemplateConfigStructure[$type]
     $isHub = $type -eq "Hub"
     
@@ -107,7 +109,7 @@ Function Add-SPOStructure {
   }
 
   Function Add-SiteContentOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [Object[]]$SPOTemplateContentConfig) {
-    foreach ($siteContent in $SPOTemplateContentConfig) {      
+    foreach ($siteContent in $SPOTemplateContentConfig) {
       # Create libraries
       try {
         $type = $siteContent.DocumentLibrary ? "DocumentLibrary" 
@@ -158,14 +160,51 @@ Function Add-SPOStructure {
       catch {
         Write-Host " ✘ failed: $($_)" -ForegroundColor Red
       }
+
+      # Apply provisioning template on list
+      try {
+        if ($siteContent.'Provisioning Template') {
+          $provisioningParameters = $siteContent['Provisioning Parameters']
+          $provisioningParameters.Title = $title
+          $provisioningParameters.Url = $objectUrl
+
+          Invoke-PnPListTemplateOnTarget -listTemplatePath $siteContent.'Provisioning Template' -templateParameters $provisioningParameters `
+            -siteConnection $siteConnection 
+        }
+      }
+      catch {
+        Write-Host " ✘ failed: $($_)" -ForegroundColor Red
+      }
     }
   }
 
-  Function Invoke-PnPSiteTemplateOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [string]$templatePath, [hashtable]$templateParameters) {
+  Function Invoke-PnPSiteTemplateOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [string]$templatePath, [System.Collections.Hashtable]$templateParameters) {
     Write-Host "⎿ Invoking site template (PnP): '$($templatePath)' [started]"
     try {
       Invoke-PnPSiteTemplate -Path $templatePath -Parameters $templateParameters -Connection $siteConnection
-      Write-Host "⎿ Invoking site template (PnP): '$($templatePath)'" -NoNewline
+      Write-Host " ✔︎ OK" -ForegroundColor DarkGreen
+    }
+    catch {
+      Write-Host " ✘ failed: $($_)" -ForegroundColor Red
+    }
+  }
+
+  Function Invoke-PnPListTemplateOnTarget([PnP.PowerShell.Commands.Base.PnPConnection]$siteConnection, [string]$listTemplatePath, [System.Collections.Hashtable]$templateParameters) {
+    try {
+      # Read and modify the list template according to the list parameters (overwrite values from PnP template)
+      $listTemplate = Read-PnPSiteTemplate -Path $listTemplatePath
+      $listTemplate.Lists[0].Title = $templateParameters.Title
+      $listTemplate.Lists[0].Url = $templateParameters.Url
+      $listTemplate.Lists[0].DocumentTemplate = $listTemplate.Lists[0].DocumentTemplate -replace "\/(\w*)\/", "/$($templateParameters.Url)/"
+      $listTemplate.Lists[0].DefaultDisplayFormUrl = $listTemplate.Lists[0].DefaultDisplayFormUrl -replace "\/(\w*)\/", "/$($templateParameters.Url)/"
+      $listTemplate.Lists[0].DefaultEditFormUrl = $listTemplate.Lists[0].DefaultEditFormUrl -replace "\/(\w*)\/", "/$($templateParameters.Url)/"
+      $listTemplate.Lists[0].DefaultNewFormUrl = $listTemplate.Lists[0].DefaultNewFormUrl -replace "\/(\w*)\/", "/$($templateParameters.Url)/"
+      $listTemplate.Lists[0].Views | ForEach-Object { 
+        $_.SchemaXml = $_.SchemaXml -replace 'Url="{site}\/(\w*)\/', "Url=""{site}/$($templateParameters.Url)/"
+      }
+      # Invoke the template
+      Write-Host "⎿ Invoking list template (PnP): '$($listTemplatePath)' [started]"
+      Invoke-PnPSiteTemplate -InputInstance $listTemplate -Handlers Lists -Parameters $templateParameters -Connection $siteConnection
       Write-Host " ✔︎ OK" -ForegroundColor DarkGreen
     }
     catch {
