@@ -18,18 +18,26 @@ function Add-FolderStructureToLibrary {
   if ($null -eq $template.SharePoint.Structure) { throw "No SharePoint Structure provided" }
 
   try {
-    foreach ($siteStructure in $template.SharePoint.Structure) {
-      foreach ($siteContent in $siteStructure.Content) {
-        if ($null -ne $siteContent.Folders) {
-          $type = $SPOTemplateConfigStructure.Hub ? "Hub" : $SPOTemplateConfigStructure.Site ? "Site" : $null
-          if ($null -eq $type) { throw "No or wrong site type provided" }
-  
-          $title = $SPOTemplateConfigStructure[$type]
-          $isHub = $type -eq "Hub"
+    $filteredSitesFromStructure = $template.SharePoint.Structure |? { $siteConnection.Url -like "*$($_.Url)" }
+    foreach ($siteStructure in $filteredSitesFromStructure) {
+      $type = $siteStructure.Hub ? "Hub" : $siteStructure.Site ? "Site" : $null
+      if ($null -eq $type) { throw "No or wrong site type provided" }
       
-          Write-Host "⭐️ $($siteContent.Values.Title) – creating folder structure:" -NoNewline
-          $objectUrl = ConvertTo-PascalCase $siteContent.values.Title
-          Add-FoldersToList -ContentDoclibFolders $siteContent.values.Folders `
+      $siteTitle = $siteStructure[$type]
+      foreach ($siteContent in $siteStructure.Content) {
+        $type = $siteContent.DocumentLibrary ? "DocumentLibrary" 
+        : $siteContent.MediaLibrary ? "MediaLibrary"
+        : $siteContent.List ? "List"
+        : $siteContent.EventsList ? "EventsList"
+        : "Other"
+        if ($type -eq "Other") { throw "Library Type does not exist." }
+        $title = $siteContent[$type]
+
+        if ($type -in @("DocumentLibrary", "MediaLibrary") -and $siteContent.Folders) { 
+        # if ($null -ne $siteContent.Folders) {    
+          Write-Host "⭐️ $($siteTitle) – creating folder structure in $($title):" -NoNewline
+          $objectUrl = ConvertTo-PascalCase $title
+          Add-FoldersToList -ContentDoclibFolders $siteContent.Folders `
             -parentPath "$objectUrl" -siteConnection $siteConnection -WhatIf:$WhatIf
           Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
         }
