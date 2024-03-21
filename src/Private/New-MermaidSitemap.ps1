@@ -46,7 +46,7 @@ function New-MermaidSitemap {
   $sitemapDirectory = Join-Path -Path $PSScriptRoot -ChildPath ../../templates
   $sitemapPath = Join-Path -Path $sitemapDirectory -ChildPath "$($TemplateName -replace '(^.*)(\.yml)', '$1.sitemap.mmd')"
 
-  $sitemapTemplatePath = Join-Path -Path $PSScriptRoot -ChildPath ../../artifacts/sitemapTemplate.eps -Resolve
+  $sitemapTemplatePath = Join-Path -Path $PSScriptRoot -ChildPath ../../assets/sitemapTemplate.eps -Resolve
   $sitemapConfig = Invoke-EpsTemplate -Path $sitemapTemplatePath -Binding $Binding
   $sitemapConfig | Out-File -FilePath $sitemapPath -NoNewline
 }
