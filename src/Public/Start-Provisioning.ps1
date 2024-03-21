@@ -11,10 +11,11 @@ Function Start-Provisioning {
   )
 
   try {
+    Clear-Host
     $template = Get-Template -TemplateName $TemplateName
     Add-SPOStructure -SPOTemplateConfig $template.SharePoint -KeepConnectionsAlive:$KeepConnectionsAlive
   }
   catch {
-    $_
+    Write-Error "$($_.Exception.Message)`n$($_.Exception.StackTrace)"
   }
 }

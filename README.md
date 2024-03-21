@@ -5,12 +5,15 @@ Under the hood, the provisioning engine is powered by the [PnP.Powershell](https
 
 Give it a try – I'm sure you will like it! 💪
 
-👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
-Any contributors are welcome! 🙌
+> [!NOTE]
+> 👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
+> Any contributors are welcome! 🙌
 
 
 ## Dependencies
-![PnP.PowerShell](https://img.shields.io/badge/PnP.Powershell-2.2.0-green.svg) 
+![PowerShell](https://img.shields.io/badge/Powershell-7.4.1-blue.svg) 
+![PnP.PowerShell](https://img.shields.io/badge/PnP.Powershell-2.4.0-blue.svg)
+![Microsoft.Graph](https://img.shields.io/badge/powershell--yaml-0.4.7-blue.svg) 
 
 
 ## Applies to
@@ -32,6 +35,7 @@ Any contributors are welcome! 🙌
 | Version | Date           | Comments        |
 | ------- | :------------- | :-------------- |
 | 1.0     | November, 2023 | Initial release |
+| 1.1     | March, 2024    | Updated provisioning schema for tenants |
 
 
 ## Disclaimer
@@ -44,7 +48,7 @@ Any contributors are welcome! 🙌
 ### Installation
 ```powershell
 Install-Module -Name powershell-yaml -Scope CurrentUser
-Install-Module -Name PnP.PowerShell -RequiredVersion 2.2.0 -Scope CurrentUser
+Install-Module -Name PnP.PowerShell -RequiredVersion 2.4.0 -Scope CurrentUser
 ```
 
 ### Generate SharePoint structure
@@ -86,19 +90,28 @@ Import-Module .\src\Provisioning.psm1 -Force
 Sync-Hubnavigation -TemplateName "standard.yml"
 ```
 
-The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
+> [!NOTE]
+>  The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
+
 
 ### Create a folder structure for a given site
 You can define any folder structure in a given site. While running the regular provisioning setup (see paragraph «Generate SharePoint structure»), a given folder structure will be created along its optional `Folder` definition in the site scope.
 
-Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step. Make sure establish a connection to the destination site before you start the generation of the folder structure:
+> [!WARNING]
+> Before provisioning any specific folder structure, a connection to the according site (target site) must be established.
+> The site (target site) must match the site identifier in the content structure of the tenant template!
+
+
+Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step. 
+Make sure to establish a connection to the destination site before you start the generation of the folder structure:
 
 ```powershell
 $siteConn = Connect-PnPOnline "https://yourtenant.sharepoint.com/sites/site" -Interactive -ReturnConnection
 Import-Module .\src\Provisioning.psm1 -Force
 Add-FolderStructureToLibrary -TemplateName "standard.yml" -siteConnection $siteConn
 ```
-The resource provisioning process is idempotent; each defined folder is only provisioned once. You can run the process as many times you want without expecting any side effects!
+> [!NOTE]
+> The resource provisioning process is idempotent; each defined folder is only provisioned once. You can run the process as many times you want without expecting any side effects!
 
 
 
@@ -118,66 +131,63 @@ SharePoint:
   AdminUpn: <the admin's UPN>
 
   Structure:
-    - One:
+    # creates a new hub site ('Hub' is the site type; can also be set to 'Site') with the title 'One'
+    - Hub: One # declare the type either as 'Site' or 'Hub'
         # the relative site url
-        Url: /sites/TestOne
-        # set to 'Communication', 'Team' or 'SPOTeam' (Modern Team Site w/o M365 Group)
-        Type: Communication 
-        # only needed when type is 'Communication'; set it to 'Blank', 'Showcase' or 'Topic'
-        Template: Blank 
-        Site Admins: # optional
-        Lcid: 1031  # optional; set to 1031 by default
-        HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
-        IsHub: true  # optional
-        ConnectedHubsite:  # optional
-        CopyHubNavigation: # optional; set the relative path to the hub site from where the navigation structure will be copied
-        Provisioning Template:  # optional; reference any PnP Site Template from your local machine
-        # the content structure (aka assets) of your site
-        Content:
-          # creates a standard document library
-          - DocumentLibrary: 
-              Title: One
-              OnQuickLaunch: True # optional; places a link in the quick launch navigation
-              Folders: # optional; generates a folder structure (items are folder names)
-                - Alpha:
-                    - Alpha.One:
-                        - Alpha.One.1 [Demo 1]:
-                            - One
-                    - Alpha.Two
-                    - Alpha.Three
-                - Beta:
-                    - Beta.One
-                    - Beta.Two:
-                        - Beta.Two.1
-                        - Beta.Two.2
-                        - Beta.Two.3
-                - Gamma          
+      Url: /sites/TestOne
+      # set to 'Communication', 'Team' or 'SPOTeam' (Modern Team Site w/o M365 Group)
+      Type: Communication 
+      # only needed when type is 'Communication'; set it to 'Blank', 'Showcase' or 'Topic'
+      Template: Blank 
+      Site Admins: # optional
+      Lcid: 1031  # optional; set to 1031 by default
+      HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
+      ConnectedHubsite:  # optional; set the relative path to the parent hub site
+      CopyHubNavigation: # optional; set the relative path to the hub site from where the navigation structure will be copied
+      Provisioning Template:  # optional; reference any PnP Site Template from your local machine
+      # the content structure (aka assets) of your site
+      Content:
+        # creates a standard document library with title 'One'
+        - DocumentLibrary: One
+          OnQuickLaunch: True # optional; places a link in the quick launch navigation
+          Provisioning Template:  # optional; reference any PnP List Template (and only list template!) from your local machine
+          Folders: # optional; generates a folder structure (items are folder names)
+            - Alpha:
+                - Alpha.One:
+                    - Alpha.One.1 [Demo 1]:
+                        - One
+                - Alpha.Two
+                - Alpha.Three
+            - Beta:
+                - Beta.One
+                - Beta.Two:
+                    - Beta.Two.1
+                    - Beta.Two.2
+                    - Beta.Two.3
+            - Gamma          
 
-          # creates a generic SPO list
-          - List:  
-              Title: Three
-              OnQuickLaunch: True
-          # creates a calendar
-          - EventsList:
-              Title: Four
-          # creates a specific media library to store media assets
-          - MediaLibrary:
-              Title: Five
-              OnQuickLaunch: True
-              Folders: # optional; generates a folder structure (items are folder names)
-                - Alpha:
-                    - Alpha.One:
-                        - Alpha.One.1 [Demo 1]:
-                            - One
-                    - Alpha.Two
-                    - Alpha.Three
-                - Beta:
-                    - Beta.One
-                    - Beta.Two:
-                        - Beta.Two.1
-                        - Beta.Two.2
-                        - Beta.Two.3
-                - Gamma          
+        # creates a standard document library with title 'Three'
+        - List: Three
+          OnQuickLaunch: True
+        # creates a calendar with title 'Four'
+        - EventsList: Four
+        # creates a specific media library to store media assets with title 'Five'
+        - MediaLibrary: Five
+          OnQuickLaunch: True
+          Folders: # optional; generates a folder structure (items are folder names)
+            - Alpha:
+                - Alpha.One:
+                    - Alpha.One.1 [Demo 1]:
+                        - One
+                - Alpha.Two
+                - Alpha.Three
+            - Beta:
+                - Beta.One
+                - Beta.Two:
+                    - Beta.Two.1
+                    - Beta.Two.2
+                    - Beta.Two.3
+            - Gamma          
     # define the next sites (as many sites as you like)...
     # - Two: ...
 ```

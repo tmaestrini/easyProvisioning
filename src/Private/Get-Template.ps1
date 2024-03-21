@@ -7,7 +7,7 @@ Function Get-Template {
     )][string]$TemplateName
   )
 
-  $ConfigPath = Join-Path -Path $PSScriptRoot -ChildPath ../../templates/$TemplateName
+  $ConfigPath = Join-Path -Path $PSScriptRoot -ChildPath ../../tenants/$TemplateName
   if (-not(Test-Path -Path $ConfigPath -PathType Leaf)) {
     Write-Error "No template found for '$Tenant'" -ErrorAction Stop
   }
