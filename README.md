@@ -109,66 +109,62 @@ SharePoint:
   AdminUpn: <the admin's UPN>
 
   Structure:
-    - One:
+    # creates a new hub site ('Hub' is the site type; can also be set to 'Site') with the title 'One'
+    - Hub: One # declare the type either as 'Site' or 'Hub'
         # the relative site url
-        Url: /sites/TestOne
-        # set to 'Communication', 'Team' or 'SPOTeam' (Modern Team Site w/o M365 Group)
-        Type: Communication 
-        # only needed when type is 'Communication'; set it to 'Blank', 'Showcase' or 'Topic'
-        Template: Blank 
-        Site Admins: # optional
-        Lcid: 1031  # optional; set to 1031 by default
-        HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
-        IsHub: true  # optional
-        ConnectedHubsite:  # optional
-        CopyHubNavigation: # optional; set the relative path to the hub site from where the navigation structure will be copied
-        Provisioning Template:  # optional; reference any PnP Site Template from your local machine
-        # the content structure (aka assets) of your site
-        Content:
-          # creates a standard document library
-          - DocumentLibrary: 
-              Title: One
-              OnQuickLaunch: True # optional; places a link in the quick launch navigation
-              Folders: # optional; generates a folder structure (items are folder names)
-                - Alpha:
-                    - Alpha.One:
-                        - Alpha.One.1 [Demo 1]:
-                            - One
-                    - Alpha.Two
-                    - Alpha.Three
-                - Beta:
-                    - Beta.One
-                    - Beta.Two:
-                        - Beta.Two.1
-                        - Beta.Two.2
-                        - Beta.Two.3
-                - Gamma          
+      Url: /sites/TestOne
+      # set to 'Communication', 'Team' or 'SPOTeam' (Modern Team Site w/o M365 Group)
+      Type: Communication 
+      # only needed when type is 'Communication'; set it to 'Blank', 'Showcase' or 'Topic'
+      Template: Blank 
+      Site Admins: # optional
+      Lcid: 1031  # optional; set to 1031 by default
+      HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
+      ConnectedHubsite:  # optional; set the relative path to the parent hub site
+      CopyHubNavigation: # optional; set the relative path to the hub site from where the navigation structure will be copied
+      Provisioning Template:  # optional; reference any PnP Site Template from your local machine
+      # the content structure (aka assets) of your site
+      Content:
+        # creates a standard document library with title 'One'
+        - DocumentLibrary: One
+          OnQuickLaunch: True # optional; places a link in the quick launch navigation
+          Folders: # optional; generates a folder structure (items are folder names)
+            - Alpha:
+                - Alpha.One:
+                    - Alpha.One.1 [Demo 1]:
+                        - One
+                - Alpha.Two
+                - Alpha.Three
+            - Beta:
+                - Beta.One
+                - Beta.Two:
+                    - Beta.Two.1
+                    - Beta.Two.2
+                    - Beta.Two.3
+            - Gamma          
 
-          # creates a generic SPO list
-          - List:  
-              Title: Three
-              OnQuickLaunch: True
-          # creates a calendar
-          - EventsList:
-              Title: Four
-          # creates a specific media library to store media assets
-          - MediaLibrary:
-              Title: Five
-              OnQuickLaunch: True
-              Folders: # optional; generates a folder structure (items are folder names)
-                - Alpha:
-                    - Alpha.One:
-                        - Alpha.One.1 [Demo 1]:
-                            - One
-                    - Alpha.Two
-                    - Alpha.Three
-                - Beta:
-                    - Beta.One
-                    - Beta.Two:
-                        - Beta.Two.1
-                        - Beta.Two.2
-                        - Beta.Two.3
-                - Gamma          
+        # creates a standard document library with title 'Three'
+        - List: Three
+          OnQuickLaunch: True
+        # creates a calendar with title 'Four'
+        - EventsList: Four
+        # creates a specific media library to store media assets with title 'Five'
+        - MediaLibrary: Five
+          OnQuickLaunch: True
+          Folders: # optional; generates a folder structure (items are folder names)
+            - Alpha:
+                - Alpha.One:
+                    - Alpha.One.1 [Demo 1]:
+                        - One
+                - Alpha.Two
+                - Alpha.Three
+            - Beta:
+                - Beta.One
+                - Beta.Two:
+                    - Beta.Two.1
+                    - Beta.Two.2
+                    - Beta.Two.3
+            - Gamma          
     # define the next sites (as many sites as you like)...
     # - Two: ...
 ```
