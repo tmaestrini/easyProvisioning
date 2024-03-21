@@ -25,11 +25,7 @@ function Add-FolderStructureToLibrary {
       
       $siteTitle = $siteStructure[$type]
       foreach ($siteContent in $siteStructure.Content) {
-        $type = $siteContent.DocumentLibrary ? "DocumentLibrary" 
-        : $siteContent.MediaLibrary ? "MediaLibrary"
-        : $siteContent.List ? "List"
-        : $siteContent.EventsList ? "EventsList"
-        : "Other"
+        $type = Get-SiteContentType -SiteContent $siteContent
         if ($type -eq "Other") { throw "Library Type does not exist." }
         $title = $siteContent[$type]
 

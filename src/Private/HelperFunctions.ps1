@@ -6,8 +6,8 @@ Function Assert([bool]$valueToTest, [string]$errorMessage) {
 }
 
 Function Ensure-Modules() {
-  Assert ($null -ne (Get-InstalledModule -Name PnP.Powershell -RequiredVersion 2.2.5 -ErrorAction SilentlyContinue)) "Module 'PnP.Powershell' in version 2.2.0 missing – Please install module first"
-  Assert ($null -ne (Get-InstalledModule -Name powershell-yaml -ErrorAction SilentlyContinue)) "Module 'PnP.Powershell' in version 2.2.0 missing – Please install module first"
+  Assert ($null -ne (Get-InstalledModule -Name PnP.Powershell -RequiredVersion 2.4.0 -ErrorAction SilentlyContinue)) "Module 'PnP.Powershell' in version 2.4.0 missing – Please install module first"
+  Assert ($null -ne (Get-InstalledModule -Name powershell-yaml -ErrorAction SilentlyContinue)) "Module 'powershell-yaml' missing – Please install module first"
 }
 
 Function ConvertTo-PascalCase([string] $text) {
@@ -17,4 +17,13 @@ Function ConvertTo-PascalCase([string] $text) {
   }
   $textOutput = $text -replace '[^0-9A-Za-z]', ' '
   return (Get-Culture).TextInfo.ToTitleCase($textOutput) -replace ' '
+}
+
+Function Get-SiteContentType([System.Collections.Hashtable]$SiteContent) {
+  $type = $SiteContent.DocumentLibrary ? "DocumentLibrary" 
+  : $SiteContent.MediaLibrary ? "MediaLibrary"
+  : $SiteContent.List ? "List"
+  : $SiteContent.EventsList ? "EventsList"
+  : "Other"
+  return $type
 }

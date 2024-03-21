@@ -112,11 +112,7 @@ Function Add-SPOStructure {
     foreach ($siteContent in $SPOTemplateContentConfig) {
       # Create libraries
       try {
-        $type = $siteContent.DocumentLibrary ? "DocumentLibrary" 
-        : $siteContent.MediaLibrary ? "MediaLibrary"
-        : $siteContent.List ? "List"
-        : $siteContent.EventsList ? "EventsList"
-        : "Other"
+        $type = Get-SiteContentType -SiteContent $siteContent
         if ($type -eq "Other") { throw "Library Type does not exist." }
         $title = $siteContent[$type]
         
