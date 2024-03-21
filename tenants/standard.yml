@@ -26,6 +26,7 @@ SharePoint:
         # creates a standard document library
         - DocumentLibrary: One
           OnQuickLaunch: True # optional; places a link in the quick launch navigation
+          Provisioning Template:  # optional; reference any PnP List Template (and only list template!) from your local machine
           Folders: # optional; generates a folder structure (items are folder names)
             - Alpha:
                 - Alpha.One:

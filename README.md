@@ -11,7 +11,9 @@ Give it a try – I'm sure you will like it! 💪
 
 
 ## Dependencies
-![PnP.PowerShell](https://img.shields.io/badge/PnP.Powershell-2.2.0-green.svg) 
+![PowerShell](https://img.shields.io/badge/Powershell-7.4.1-blue.svg) 
+![PnP.PowerShell](https://img.shields.io/badge/PnP.Powershell-2.4.0-blue.svg)
+![Microsoft.Graph](https://img.shields.io/badge/powershell--yaml-0.4.7-blue.svg) 
 
 
 ## Applies to
@@ -33,6 +35,7 @@ Give it a try – I'm sure you will like it! 💪
 | Version | Date           | Comments        |
 | ------- | :------------- | :-------------- |
 | 1.0     | November, 2023 | Initial release |
+| 1.1     | March, 2024    | Updated provisioning schema for tenants |
 
 
 ## Disclaimer
@@ -45,7 +48,7 @@ Give it a try – I'm sure you will like it! 💪
 ### Installation
 ```powershell
 Install-Module -Name powershell-yaml -Scope CurrentUser
-Install-Module -Name PnP.PowerShell -RequiredVersion 2.2.0 -Scope CurrentUser
+Install-Module -Name PnP.PowerShell -RequiredVersion 2.4.0 -Scope CurrentUser
 ```
 
 ### Generate SharePoint structure
@@ -80,6 +83,11 @@ Sync-Hubnavigation -TemplateName "standard.yml"
 
 ### Create a folder structure for a given site
 You can define any folder structure in a given site. While running the regular provisioning setup (see paragraph «Generate SharePoint structure»), a given folder structure will be created along its optional `Folder` definition in the site scope.
+
+```
+> [!WARNING]
+> Please notice that the connected site (target site) must be in the content structure of the tenant template!
+
 
 Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step. Make sure establish a connection to the destination site before you start the generation of the folder structure:
 
