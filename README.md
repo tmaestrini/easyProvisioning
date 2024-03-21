@@ -84,12 +84,13 @@ Sync-Hubnavigation -TemplateName "standard.yml"
 ### Create a folder structure for a given site
 You can define any folder structure in a given site. While running the regular provisioning setup (see paragraph «Generate SharePoint structure»), a given folder structure will be created along its optional `Folder` definition in the site scope.
 
-```
 > [!WARNING]
-> Please notice that the connected site (target site) must be in the content structure of the tenant template!
+> Before provisioning any specific folder structure, a connection to the according site (target site) must be established.
+> The site (target site) must match the site identifier in the content structure of the tenant template!
 
 
-Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step. Make sure establish a connection to the destination site before you start the generation of the folder structure:
+Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step. 
+Make sure to establish a connection to the destination site before you start the generation of the folder structure:
 
 ```powershell
 $siteConn = Connect-PnPOnline "https://yourtenant.sharepoint.com/sites/site" -Interactive -ReturnConnection
@@ -136,6 +137,7 @@ SharePoint:
         # creates a standard document library with title 'One'
         - DocumentLibrary: One
           OnQuickLaunch: True # optional; places a link in the quick launch navigation
+          Provisioning Template:  # optional; reference any PnP List Template (and only list template!) from your local machine
           Folders: # optional; generates a folder structure (items are folder names)
             - Alpha:
                 - Alpha.One:
