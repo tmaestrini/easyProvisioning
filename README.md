@@ -379,7 +379,7 @@ Contains: tenants/templates/hr.yml
 The _extension template_ file can contain any structure along your needs. 
 
 > [!NOTE]
-> To make use of the _extension template_, make sure that the name of the SharePoint tenant in the _extension template_ matches exactly the tenant's name in the main definition template.
+> To make use of the _extension template_, make sure that the name of the SharePoint tenant (`TenantId`) in the _extension template_ matches exactly the tenant's name in the main definition template.
 
 Example structure of the _extension template_:
 
