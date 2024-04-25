@@ -36,6 +36,7 @@ Give it a try – I'm sure you will like it! 💪
 | ------- | :------------- | :-------------- |
 | 1.0     | November, 2023 | Initial release |
 | 1.1     | March, 2024    | Updated provisioning schema for tenants |
+| 1.1.1   | April, 2024    | Add reference templates integration |
 
 
 ## Disclaimer
