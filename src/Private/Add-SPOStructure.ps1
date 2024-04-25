@@ -16,7 +16,7 @@ Function Add-SPOStructure {
     $title = $SPOTemplateConfigStructure[$type]
     $isHub = $type -eq "Hub"
     
-    Write-Host "⭐️ Creating $($type) '$($title)': " -NoNewline
+    Write-Host "`n⭐️ Creating $($type) '$($title)': " -NoNewline
     $atts = @{
       Title = $title
       Url   = "$($spoUrl)$($SPOTemplateConfigStructure.Url.TrimStart('/'))"
