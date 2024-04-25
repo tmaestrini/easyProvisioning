@@ -178,3 +178,56 @@ SharePoint:
     # define the next sites (as many sites as you like)...
     # - Two: ...
 ```
+
+### Integrate sub structures into your tenant template
+
+In order to structure or modularize your tenant structure, you can divide a basic structure into a _main definition template_ and an _extension template_.
+Therefore, you simply have to integrate the _extension template_ in the _main definition template_ by referencing the relative path (from the project's root) within the `contains` attribute. 
+
+> [!NOTE]
+> The _extension template_ is a fully functional tenant template file (.yml), which could work as a standalone template definition.
+
+Your _main definition template_ must look like this in the first definition rows:
+
+```yaml
+Tenant: <your tenant name> # name can be set according to your needs
+
+# optional; set the relative path (to the root) to another settings file which contains provisioning settings that should be applied to this site
+Contains: tenants/templates/hr.yml
+
+# further structure omitted
+```
+The _extension template_ file can contain any structure along your needs. 
+
+> [!NOTE]
+> To make use of the _extension template_, make sure that the name of the SharePoint tenant in the _extension template_ matches exactly the tenant's name in the main definition template.
+
+Example structure of the _extension template_:
+
+```yaml
+Tenant: <your tenant name> # name can be set according to your needs
+
+# Sharepoint Specific Settings
+SharePoint:
+  TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso) must match the tenant's name in the main definition template
+  AdminUpn: <the admin's UPN>
+
+  Structure:
+    - Site: HR One
+      Url: /sites/HR-One
+      Type: SPOTeam 
+      Template: Blank
+      ConnectedHubsite: /sites/HR
+
+    - Site: HR Two
+      Url: /sites/HR-Two
+      Type: SPOTeam 
+      Template: Blank
+      ConnectedHubsite: /sites/HR
+
+    - Site: HR Three
+      Url: /sites/HR-Three
+      Type: SPOTeam 
+      Template: Blank
+      ConnectedHubsite: /sites/HR
+```
