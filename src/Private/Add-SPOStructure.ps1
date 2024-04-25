@@ -141,7 +141,8 @@ Function Add-SPOStructure {
         Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
       }
       catch {
-        Write-Host " ✘ failed: $($_)" -ForegroundColor Red
+        if ($_ -like "*already exist*") { Write-Host " ✘ existing: $($_)" -ForegroundColor DarkYellow } 
+        else { Write-Host " ✘ failed: $($_)" -ForegroundColor Red }
       }
 
       # Create folder structure (if defined)
@@ -160,7 +161,7 @@ Function Add-SPOStructure {
       # Apply provisioning template on list
       try {
         if ($siteContent.'Provisioning Template') {
-          $provisioningParameters = $siteContent['Provisioning Parameters']
+          $provisioningParameters = ($siteContent.'Provisioning Parameters') ? $siteContent.'Provisioning Parameters' : @{} 
           $provisioningParameters.Title = $title
           $provisioningParameters.Url = $objectUrl
 

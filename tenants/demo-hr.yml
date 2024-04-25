@@ -7,7 +7,7 @@ Contains: tenants/templates/demo-hr-templates.yml
 SharePoint:
   TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso)
   AdminUpn: <the admin's UPN>
-  
+
   Structure:
     - Hub: HR
       # the relative site url
@@ -47,6 +47,10 @@ SharePoint:
         # creates a generic SPO list
         - List: Three
           OnQuickLaunch: True
+          Provisioning Template: tenants/templates/pnp-list-template.xml
+          Provisioning Parameters: # optional; gives the possibility to set list template parameters that are used within the provisioning template (must be defined!)
+            # ParameterNameA: One
+            # ParameterNameB: Two
         # creates a calendar
         - EventsList: Four
         # creates a specific media library to store media assets

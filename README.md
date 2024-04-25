@@ -139,6 +139,7 @@ SharePoint:
         - DocumentLibrary: One
           OnQuickLaunch: True # optional; places a link in the quick launch navigation
           Provisioning Template:  # optional; reference any PnP List Template (and only list template!) from your local machine
+          Provisioning Parameters: # optional; gives the possibility to set list template parameters that are used within the provisioning template (must be defined!)
           Folders: # optional; generates a folder structure (items are folder names)
             - Alpha:
                 - Alpha.One:
@@ -157,6 +158,10 @@ SharePoint:
         # creates a standard document library with title 'Three'
         - List: Three
           OnQuickLaunch: True
+          Provisioning Template: # reference any PnP List Template (and only list template!) from your local machine (e.g. tenants/templates/pnp-list-template.xml)
+          Provisioning Parameters: # optional; gives the possibility to set list template parameters that are used within the provisioning template (must be defined!)
+            # ParameterNameA: ParameterOne
+            # ParameterNameB: ParameterTwo
         # creates a calendar with title 'Four'
         - EventsList: Four
         # creates a specific media library to store media assets with title 'Five'
