@@ -27,7 +27,7 @@ Give it a try – I'm sure you will like it! 💪
 
 | Solution         | Author(s)                                                                                   |
 | ---------------- | ------------------------------------------------------------------------------------------- |
-| easyProvisioning | Tobias Maestrini (bee365 / adesso Schweiz ag) [@tmaestrini](https://twitter.com/tmaestrini) |
+| easyProvisioning | Tobias Maestrini [@tmaestrini](https://twitter.com/tmaestrini) |
 
 
 ## Version history
