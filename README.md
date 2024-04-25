@@ -374,6 +374,10 @@ Tenant: <your tenant name> # name can be set according to your needs
 # optional; set the relative path (to the root) to another settings file which contains provisioning settings that should be applied to this site
 Contains: tenants/templates/hr.yml
 
+SharePoint:
+  TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso)
+  AdminUpn: <the admin's UPN>
+
 # further structure omitted
 ```
 The _extension template_ file can contain any structure along your needs. 
