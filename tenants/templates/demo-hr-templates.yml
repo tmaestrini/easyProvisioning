@@ -1,0 +1,25 @@
+Tenant: <your tenant name> # name can be set according to your needs
+
+# Sharepoint Specific Settings
+SharePoint:
+  TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso)
+  AdminUpn: <the admin's UPN>
+
+  Structure:
+    - Site: HR One
+      Url: /sites/HR-One
+      Type: SPOTeam 
+      Template: Blank
+      ConnectedHubsite: /sites/HR
+
+    - Site: HR Two
+      Url: /sites/HR-Two
+      Type: SPOTeam 
+      Template: Blank
+      ConnectedHubsite: /sites/HR
+
+    - Site: HR Three
+      Url: /sites/HR-Three
+      Type: SPOTeam 
+      Template: Blank
+      ConnectedHubsite: /sites/HR

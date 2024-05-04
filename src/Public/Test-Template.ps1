@@ -27,6 +27,6 @@ Function Test-Template {
     $ErrorActionPreference = $standardPrefs;
   }
   catch {
-    $_
+    throw "Testing template '$($TemplateName)' failed: $_"
   }
 }

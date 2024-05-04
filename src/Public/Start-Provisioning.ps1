@@ -12,7 +12,10 @@ Function Start-Provisioning {
 
   try {
     Clear-Host
+    Test-Template -TemplateName $TemplateName
     $template = Get-Template -TemplateName $TemplateName
+
+    # SharePoint Provisioning
     Add-SPOStructure -SPOTemplateConfig $template.SharePoint -KeepConnectionsAlive:$KeepConnectionsAlive
   }
   catch {

@@ -9,7 +9,7 @@ logs
 # Configurations
 tenants/*
 !tenants/standard.yml
-
+examples/*
 
 # Temporary files
 cache
