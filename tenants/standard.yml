@@ -25,6 +25,7 @@ SharePoint:
       Content:
         # creates a standard document library
         - DocumentLibrary: One
+          Url: /One # optional; the desired relative url of the document library in the site. If not set, the 'title' of the library will be taken.
           OnQuickLaunch: True # optional; places a link in the quick launch navigation
           Provisioning Template:  # optional; reference any PnP List Template (and only list template!) from your local machine
           Folders: # optional; generates a folder structure (items are folder names)
@@ -43,9 +44,12 @@ SharePoint:
             - Gamma          
         # creates a generic SPO list
         - List: Three
+          Url: /Three # optional; the desired relative url of the document library in the site. If not set, the 'title' of the library will be taken.
           OnQuickLaunch: True
         # creates a calendar
         - EventsList: Four
+          Url: /Four # optional; the desired relative url of the document library in the site. If not set, the 'title' of the library will be taken.
         # creates a specific media library to store media assets
         - MediaLibrary: Five
+          Url: /Five # optional; the desired relative url of the document library in the site. If not set, the 'title' of the library will be taken.
           OnQuickLaunch: True

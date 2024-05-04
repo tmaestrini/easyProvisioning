@@ -119,7 +119,7 @@ Function Add-SPOStructure {
         Write-Host "⎿ Creating content: <$($type)> '$($title)'" -NoNewline
         $quickLaunch = $siteContent.OnQuickLaunch -and $siteContent.OnQuickLaunch -eq $true ? $true : $false
 
-        $objectUrl = ConvertTo-PascalCase $title
+        $objectUrl = ($siteContent.Url) ? ($siteContent.Url.trim()) : (ConvertTo-PascalCase $title)
         switch ($type) {
           "DocumentLibrary" { $list = New-PnPList -Template DocumentLibrary -Url $objectUrl -Title $title -OnQuickLaunch:$quickLaunch -Connection $siteConnection }
           "MediaLibrary" {

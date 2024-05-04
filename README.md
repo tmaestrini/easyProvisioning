@@ -141,6 +141,7 @@ SharePoint:
       Content:
         # creates a standard document library with title 'One'
         - DocumentLibrary: One
+          Url: /One # optional; the desired relative url of the document library in the site. If not set, the 'title' of the library will be taken.
           OnQuickLaunch: True # optional; places a link in the quick launch navigation
           Provisioning Template:  # optional; reference any PnP List Template (and only list template!) from your local machine
           Folders: # optional; generates a folder structure (items are folder names)
@@ -160,6 +161,7 @@ SharePoint:
 
         # creates a standard document library with title 'Three'
         - List: Three
+          Url: /Three # optional; the desired relative url of the document library in the site. If not set, the 'title' of the library will be taken.
           OnQuickLaunch: True
           Provisioning Template: # reference any PnP List Template (and only list template!) from your local machine (e.g. tenants/templates/pnp-list-template.xml)
           Provisioning Parameters: # optional; gives the possibility to set list template parameters that are used within the provisioning template (must be defined!)
@@ -167,8 +169,10 @@ SharePoint:
             # ParameterNameB: ParameterTwo
         # creates a calendar with title 'Four'
         - EventsList: Four
+          Url: /Four # optional; the desired relative url of the document library in the site. If not set, the 'title' of the library will be taken.
         # creates a specific media library to store media assets with title 'Five'
         - MediaLibrary: Five
+          Url: /Five # optional; the desired relative url of the document library in the site. If not set, the 'title' of the library will be taken.
           OnQuickLaunch: True
           Folders: # optional; generates a folder structure (items are folder names)
             - Alpha:
