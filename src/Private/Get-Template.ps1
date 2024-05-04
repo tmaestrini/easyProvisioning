@@ -9,7 +9,15 @@ Function Get-Template {
 
   # Merge contained templates into main config
   function Merge-ContainedTemplates {
-    if ($Config.Contains) {
+    [cmdletbinding()]
+    param(
+      [Parameter(
+        Mandatory = $true,
+        HelpMessage = "The main data (config based on the main configuration file)"
+      )][hashtable]$Config
+    )
+  
+    if ($Config.ContainsKey("Contains")) {
       $Content = (Get-Content -Path $Config.Contains) -join "`n"
       $ContainedConfig = ConvertFrom-Yaml $Content
   
@@ -31,6 +39,6 @@ Function Get-Template {
   $Content = (Get-Content -Path $ConfigPath) -join "`n"
   $Config = ConvertFrom-Yaml $Content
   
-  Merge-ContainedTemplates
+  Merge-ContainedTemplates -Config $Config
   return $Config
 }
