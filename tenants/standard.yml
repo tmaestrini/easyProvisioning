@@ -18,7 +18,7 @@ SharePoint:
       SharingCapability: # optional; set to 'Disabled' (default), 'ExistingExternalUserSharingOnly', 'ExternalUserAndGuestSharing' or 'ExternalUserSharingOnly'
       DisableCompanyWideSharingLinks: # optional; set to False (default) or True
       HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
-      ConnectedHubsite:  # optional
+      ConnectedHubsite:  # optional; set the relative path to the parent hub site
       CopyHubNavigation: # optional; set the relative path to the hub site from where the navigation structure will be copied
       Provisioning Template:  # optional; reference any PnP Site Template from your local machine
       # the content structure (aka assets) of your site
