@@ -14,8 +14,8 @@ Function Sync-Hubnavigation {
     Clear-Host
     Write-Host "Starting sync of hub navigation"
     foreach ($siteStructure in $template.SharePoint.Structure) {
-      if ($null -ne $siteStructure.Values.CopyHubNavigation) {
-        Write-Host "⭐️ Site '$($siteStructure.Values.Url)'"
+      if ($null -ne $siteStructure.CopyHubNavigation) {
+        Write-Host "⭐️ Site '$($siteStructure.Url)'"
         Copy-Hubnavigation -SPOStructureSiteTemplateConfig $siteStructure -SPOBaseUrl $spoBaseUrl
       }
     }
