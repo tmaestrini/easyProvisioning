@@ -1,5 +1,6 @@
 # easyProvisioning – resource provisioning made as easy as possible
-*easyProvisioning* offers a quick and easy way to provision site resources and a range of predefined assets in SharePoint Online (SPO). By defining a YAML template that contains all the information about the desired site resources, this method is both a straightforward approach to provisioning and also serves as documentation for the provisioned resources.
+
+_easyProvisioning_ offers a quick and easy way to provision site resources and a range of predefined assets in SharePoint Online (SPO). By defining a YAML template that contains all the information about the desired site resources, this method is both a straightforward approach to provisioning and also serves as documentation for the provisioned resources.
 
 Under the hood, the provisioning engine is powered by the [PnP.Powershell](https://pnp.github.io/powershell/) module and the [PnPProvisioning concept](https://github.com/pnp/PnP-Provisioning-Schema). This provides us with a powerful toolset for setting up and managing all resources that need to be provisioned within M365 – driven by the power of PowerShell 😃.
 
@@ -9,35 +10,32 @@ Give it a try – I'm sure you will like it! 💪
 > 👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
 > Any contributors are welcome! 🙌
 
-
 ## Dependencies
-![PowerShell](https://img.shields.io/badge/Powershell-7.4.1-blue.svg) 
-![PnP.PowerShell](https://img.shields.io/badge/PnP.Powershell-2.4.0-blue.svg)
-![Microsoft.Graph](https://img.shields.io/badge/powershell--yaml-0.4.7-blue.svg) 
 
+![PowerShell](https://img.shields.io/badge/Powershell-7.4.1-blue.svg)
+![PnP.PowerShell](https://img.shields.io/badge/PnP.Powershell-2.4.0-blue.svg)
+![Microsoft.Graph](https://img.shields.io/badge/powershell--yaml-0.4.7-blue.svg)
 
 ## Applies to
+
 - [SharePoint Online](https://learn.microsoft.com/en-us/office365/servicedescriptions/sharepoint-online-service-description/sharepoint-online-service-description)
 - [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
 
 > Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
 
-
 ## Solution
 
-| Solution         | Author(s)                                                                                   |
-| ---------------- | ------------------------------------------------------------------------------------------- |
+| Solution         | Author(s)                                                      |
+| ---------------- | -------------------------------------------------------------- |
 | easyProvisioning | Tobias Maestrini [@tmaestrini](https://twitter.com/tmaestrini) |
-
 
 ## Version history
 
-| Version | Date           | Comments        |
-| ------- | :------------- | :-------------- |
-| 1.0     | November, 2023 | Initial release |
+| Version | Date           | Comments                                |
+| ------- | :------------- | :-------------------------------------- |
+| 1.0     | November, 2023 | Initial release                         |
 | 1.1     | March, 2024    | Updated provisioning schema for tenants |
-| 1.1.1   | April, 2024    | Add reference templates integration |
-
+| 1.1.1   | April, 2024    | Add reference templates integration     |
 
 ## Disclaimer
 
@@ -46,14 +44,17 @@ Give it a try – I'm sure you will like it! 💪
 ---
 
 ## Minimal path to awesome
+
 ### Installation
+
 ```powershell
 Install-Module -Name powershell-yaml -Scope CurrentUser
 Install-Module -Name PnP.PowerShell -RequiredVersion 2.4.0 -Scope CurrentUser
 ```
 
 ### Generate SharePoint structure
-The resource provisioning generally follows the structure that is defined by the YAML structure within the *template file* (for reference: see section below).
+
+The resource provisioning generally follows the structure that is defined by the YAML structure within the _template file_ (for reference: see section below).
 Simply start the provisioning process by importing the `Provisioning.psm1` module and then calling the `Start-Provisioning` command as follows:
 
 ```powershell
@@ -67,9 +68,10 @@ Test-Template -TemplateName "standard.yml"
 The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the provisioning process as many times you want without expecting any side effects!
 
 ### Sync hub navigation from template site
+
 You can sync any given hub navigation to any given site. Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed again in a separate step.
 
-The hub navigation synchronization copies an existing navigation structure from a relative site url (e.g. `/sites/IntranetHome`) that is specified in the template attribute `CopyHubNavigation` in the *template file* (see section below) and applies it to the target site (that is the site where the template attribute `CopyHubNavigation` was defined). Just make sure that the target site has a proper hub navigation and the relative path to the site url exists. This is really nice – it leads to a consistent navigation experience on all intranet sites!
+The hub navigation synchronization copies an existing navigation structure from a relative site url (e.g. `/sites/IntranetHome`) that is specified in the template attribute `CopyHubNavigation` in the _template file_ (see section below) and applies it to the target site (that is the site where the template attribute `CopyHubNavigation` was defined). Just make sure that the target site has a proper hub navigation and the relative path to the site url exists. This is really nice – it leads to a consistent navigation experience on all intranet sites!
 
 Simply start the provisioning process by importing the `Provisioning.psm1` module (if not already done so!) and then calling the `Sync-Hubnavigation` command as follows:
 
@@ -79,18 +81,17 @@ Sync-Hubnavigation -TemplateName "standard.yml"
 ```
 
 > [!NOTE]
->  The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
-
+> The resource provisioning process is idempotent; each defined resource or setting is only provisioned once. You can start the sync process as many times you want without expecting any side effects!
 
 ### Create a folder structure for a given site
+
 You can define any folder structure in a given site. While running the regular provisioning setup (see paragraph «Generate SharePoint structure»), a given folder structure will be created along its optional `Folder` definition in the site scope.
 
 > [!WARNING]
 > Before provisioning any specific folder structure, a connection to the according site (target site) must be established.
 > The site (target site) must match the site identifier in the content structure of the tenant template!
 
-
-Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step. 
+Although the provisioning process for creating the SharePoint structure includes this (if defined), the function can also be executed within a desired site in a separate step.
 Make sure to establish a connection to the destination site before you start the generation of the folder structure:
 
 ```powershell
@@ -98,12 +99,12 @@ $siteConn = Connect-PnPOnline "https://yourtenant.sharepoint.com/sites/site" -In
 Import-Module .\src\Provisioning.psm1 -Force
 Add-FolderStructureToLibrary -TemplateName "standard.yml" -siteConnection $siteConn
 ```
+
 > [!NOTE]
 > The resource provisioning process is idempotent; each defined folder is only provisioned once. You can run the process as many times you want without expecting any side effects!
 
-
-
 ## The template file (YAML)
+
 To get your resources provisioned, just write down the structure in one single YAML file.
 All you have to do is to make sure that your YAML file implements the following schema.
 
@@ -124,9 +125,9 @@ SharePoint:
         # the relative site url
       Url: /sites/TestOne
       # set to 'Communication', 'Team' or 'SPOTeam' (Modern Team Site w/o M365 Group)
-      Type: Communication 
+      Type: Communication
       # only needed when type is 'Communication'; set it to 'Blank', 'Showcase' or 'Topic'
-      Template: Blank 
+      Template: Blank
       Site Admins: # optional
       Lcid: 1031  # optional; set to 1031 by default
       HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
@@ -136,6 +137,8 @@ SharePoint:
       Provisioning Parameters: # optional; gives the possibility to set list template parameters that are used within the provisioning template (must be defined!)
         # ParameterName1: ParameterOne
         # ParameterName2: ParameterTwo
+      SharingCapability: # optional; set to 'Disabled', 'ExistingExternalUserSharingOnly', 'ExternalUserAndGuestSharing' or 'ExternalUserSharingOnly'
+      DisableCompanyWideSharingLinks: # optional; set to False (default) or True
 
       # the content structure (aka assets) of your site
       Content:
@@ -157,7 +160,7 @@ SharePoint:
                     - Beta.Two.1
                     - Beta.Two.2
                     - Beta.Two.3
-            - Gamma          
+            - Gamma
 
         # creates a standard document library with title 'Three'
         - List: Three
@@ -187,16 +190,18 @@ SharePoint:
                     - Beta.Two.1
                     - Beta.Two.2
                     - Beta.Two.3
-            - Gamma          
+            - Gamma
     # define the next sites (as many sites as you like)...
     # - Two: ...
 ```
+
 ### Support for PnP Provisioning templates
 
-Within your provisioning template (.yml), you can reference any _PnP template_ according to your needs. 
+Within your provisioning template (.yml), you can reference any _PnP template_ according to your needs.
 By defining an optional attribute `Provisioning Template`, you can pass a reference to a valid _PnP List Template_ or to a _PnP site template_, which resides inside your project structure. Optionally, _provisioning parameters_ can be passed to the provisioning template by defining objects within the `Provisioning Parameters` attribute.
 
 Example: pass aprovisioning template to a site (_PnP site template_):
+
 ```yaml
 SharePoint:
   # <content intentionally omitted>
@@ -204,12 +209,14 @@ SharePoint:
     # creates a new hub site ('Hub' is the site type; can also be set to 'Site') with the title 'One'
     - Hub: One # declare the type either as 'Site' or 'Hub'
       # <content intentionally omitted>
-      Provisioning Template:  tenants/templates/pnp-site-template.xml # reference any PnP Site Template from your local machine
+      Provisioning Template: tenants/templates/pnp-site-template.xml # reference any PnP Site Template from your local machine
       Provisioning Parameters: # (optional) pass template parameters that are used within the provisioning template (must be defined!)
         ParameterNameA: ParameterOne
         ParameterNameB: ParameterTwo
 ```
+
 Example: pass a provisioning template to a list or document library (_PnP site template_, especially with `<List>` definition):
+
 ```yaml
 SharePoint:
   # <content intentionally omitted>
@@ -217,7 +224,7 @@ SharePoint:
     # <content intentionally omitted>
     Content:
       - DocumentLibrary: MyDocumentLibrary
-        Provisioning Template:  tenants/templates/pnp-doclib-template.xml # reference any PnP Site Template from your local machine
+        Provisioning Template: tenants/templates/pnp-doclib-template.xml # reference any PnP Site Template from your local machine
         Provisioning Parameters: # (optional) pass template parameters that are used within the provisioning template (must be defined!)
           ParameterNameA: ParameterOne
           ParameterNameB: ParameterTwo
@@ -227,9 +234,10 @@ SharePoint:
         Provisioning Parameters: # (optional) pass list template parameters that are used within the provisioning template (must be defined!)
           ParameterNameA: ParameterOne
           ParameterNameB: ParameterTwo
-
 ```
+
 An according list template could like the following:
+
 ```xml
 <pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:Preferences Generator="PnP.Framework, Version=1.9.1.0, Culture=neutral, PublicKeyToken=0d501f89f11b748c" />
@@ -365,7 +373,7 @@ An according list template could like the following:
 ### Integrate sub structures into your tenant template
 
 In order to structure or modularize your tenant structure, you can divide a basic structure into a _main definition template_ and an _extension template_.
-Therefore, you simply have to integrate the _extension template_ in the _main definition template_ by referencing the relative path (from the project's root) within the `contains` attribute. 
+Therefore, you simply have to integrate the _extension template_ in the _main definition template_ by referencing the relative path (from the project's root) within the `contains` attribute.
 
 > [!NOTE]
 > The _extension template_ is a fully functional tenant template file (.yml), which could work as a standalone template definition.
@@ -381,10 +389,10 @@ Contains: tenants/templates/hr.yml
 SharePoint:
   TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso)
   AdminUpn: <the admin's UPN>
-
 # further structure omitted
 ```
-The _extension template_ file can contain any structure along your needs. 
+
+The _extension template_ file can contain any structure along your needs.
 
 > [!NOTE]
 > To make use of the _extension template_, make sure that the name of the SharePoint tenant (`TenantId`) in the _extension template_ matches exactly the tenant's name in the main definition template.
@@ -402,19 +410,19 @@ SharePoint:
   Structure:
     - Site: HR One
       Url: /sites/HR-One
-      Type: SPOTeam 
+      Type: SPOTeam
       Template: Blank
       ConnectedHubsite: /sites/HR
 
     - Site: HR Two
       Url: /sites/HR-Two
-      Type: SPOTeam 
+      Type: SPOTeam
       Template: Blank
       ConnectedHubsite: /sites/HR
 
     - Site: HR Three
       Url: /sites/HR-Three
-      Type: SPOTeam 
+      Type: SPOTeam
       Template: Blank
       ConnectedHubsite: /sites/HR
 ```

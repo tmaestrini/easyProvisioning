@@ -52,7 +52,7 @@ Function Add-SPOStructure {
         "ExternalUserAndGuestSharing" { Set-PnPSite -Identity $createdSite -SharingCapability ExternalUserAndGuestSharing -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
         "ExternalUserSharingOnly" { Set-PnPSite -Identity $createdSite -SharingCapability ExternalUserSharingOnly -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
         "Disabled" { Set-PnPSite -Identity $createdSite -SharingCapability Disabled -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
-        Default { Set-PnPSite -Identity $createdSite -SharingCapability Disabled -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
+        Default { Set-PnPSite -Identity $createdSite -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
       }
 
       Write-Host $($createdSite) -NoNewline

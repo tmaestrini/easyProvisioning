@@ -15,7 +15,7 @@ SharePoint:
       Template: Blank 
       Site Admins: # optional
       Lcid: 1031  # optional; set to 1031 by default
-      SharingCapability: # optional; set to 'Disabled' (default), 'ExistingExternalUserSharingOnly', 'ExternalUserAndGuestSharing' or 'ExternalUserSharingOnly'
+      SharingCapability: # optional; set to 'Disabled', 'ExistingExternalUserSharingOnly', 'ExternalUserAndGuestSharing' or 'ExternalUserSharingOnly'
       DisableCompanyWideSharingLinks: # optional; set to False (default) or True
       HomepageLayout: Article # optional; set to 'Home' (default), 'Article' or 'SingleWebPartAppPage'
       ConnectedHubsite:  # optional; set the relative path to the parent hub site
