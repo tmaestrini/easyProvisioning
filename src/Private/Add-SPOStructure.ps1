@@ -40,23 +40,32 @@ Function Add-SPOStructure {
         }
       }
 
-      # Set sharing capability (optional)
-      switch ($SPOTemplateConfigStructure.DisableCompanyWideSharingLinks) {
-        "True" { $DisableCompanyWideSharingLinks = [Microsoft.Online.SharePoint.TenantAdministration.CompanyWideSharingLinksPolicy]::Disabled }
-        "False" { $DisableCompanyWideSharingLinks = [Microsoft.Online.SharePoint.TenantAdministration.CompanyWideSharingLinksPolicy]::NotDisabled }
-        Default { $DisableCompanyWideSharingLinks = [Microsoft.Online.SharePoint.TenantAdministration.CompanyWideSharingLinksPolicy]::NotDisabled }
-      }
-      
-      switch ($SPOTemplateConfigStructure.SharingCapability) {
-        "ExistingExternalUserSharingOnly" { Set-PnPSite -Identity $createdSite -SharingCapability ExistingExternalUserSharingOnly -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
-        "ExternalUserAndGuestSharing" { Set-PnPSite -Identity $createdSite -SharingCapability ExternalUserAndGuestSharing -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
-        "ExternalUserSharingOnly" { Set-PnPSite -Identity $createdSite -SharingCapability ExternalUserSharingOnly -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
-        "Disabled" { Set-PnPSite -Identity $createdSite -SharingCapability Disabled -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
-        Default { Set-PnPSite -Identity $createdSite -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
-      }
-
-      Write-Host $($createdSite) -NoNewline
       Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
+      Write-Host $($createdSite)
+      
+      # Set sharing capability (optional)
+      try {
+        Write-Host "⎿ Setting sharing policies: " -NoNewline
+
+        switch ($SPOTemplateConfigStructure.DisableCompanyWideSharingLinks) {
+          "True" { $DisableCompanyWideSharingLinks = [Microsoft.Online.SharePoint.TenantAdministration.CompanyWideSharingLinksPolicy]::Disabled }
+          "False" { $DisableCompanyWideSharingLinks = [Microsoft.Online.SharePoint.TenantAdministration.CompanyWideSharingLinksPolicy]::NotDisabled }
+          Default { $DisableCompanyWideSharingLinks = [Microsoft.Online.SharePoint.TenantAdministration.CompanyWideSharingLinksPolicy]::NotDisabled }
+        }
+        
+        switch ($SPOTemplateConfigStructure.SharingCapability) {
+          "ExistingExternalUserSharingOnly" { Set-PnPSite -Identity $createdSite -SharingCapability ExistingExternalUserSharingOnly -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
+          "ExternalUserAndGuestSharing" { Set-PnPSite -Identity $createdSite -SharingCapability ExternalUserAndGuestSharing -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
+          "ExternalUserSharingOnly" { Set-PnPSite -Identity $createdSite -SharingCapability ExternalUserSharingOnly -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
+          "Disabled" { Set-PnPSite -Identity $createdSite -SharingCapability Disabled -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
+          Default { Set-PnPSite -Identity $createdSite -DisableCompanyWideSharingLinks $DisableCompanyWideSharingLinks -Connection $global:SPOAdminConnection }
+        }
+        
+        Write-Host " ✔︎ Done" -ForegroundColor DarkGreen
+      }
+      catch {
+        Write-Host " 👉 Notice: Sharing settings could not be set ($_)" -ForegroundColor DarkYellow
+      }
     }
     catch {
       Write-Host " ✘ failed: $($_)" -ForegroundColor Red
