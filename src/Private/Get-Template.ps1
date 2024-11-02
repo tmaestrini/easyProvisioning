@@ -7,6 +7,8 @@ Function Get-Template {
     )][string]$TemplateName
   )
 
+  $MainConfig = @{ }
+
   # Merge contained templates into main config
   function Merge-ContainedTemplates {
     [cmdletbinding()]
@@ -16,16 +18,20 @@ Function Get-Template {
         HelpMessage = "The main data (config based on the main configuration file)"
       )][hashtable]$Config
     )
+      
+    if ($Config.ContainsKey("Contains") -and ($Config.Contains -is [System.Collections.IList])) {
+      foreach ($ContainedPath in $Config.Contains) {
+        $Content = (Get-Content -Path $ContainedPath) -join "`n"
+        $ContainedConfig = ConvertFrom-Yaml $Content
   
-    if ($Config.ContainsKey("Contains")) {
-      $Content = (Get-Content -Path $Config.Contains) -join "`n"
-      $ContainedConfig = ConvertFrom-Yaml $Content
-  
-      # SharePoint
-      if ($Config.SharePoint.TenantId -eq $ContainedConfig.SharePoint.TenantId) {
-        foreach ($element in $ContainedConfig.SharePoint.Structure) {
-          $Config.SharePoint.Structure.Add($element)
+        # SharePoint
+        if ($MainConfig.SharePoint.TenantId -eq $ContainedConfig.SharePoint.TenantId) {
+          foreach ($element in $ContainedConfig.SharePoint.Structure) {
+            $MainConfig.SharePoint.Structure.Add($element)
+          }
         }
+
+        Merge-ContainedTemplates -Config $ContainedConfig
       }
     }
   }
@@ -37,8 +43,8 @@ Function Get-Template {
   }
 
   $Content = (Get-Content -Path $ConfigPath) -join "`n"
-  $Config = ConvertFrom-Yaml $Content
+  $MainConfig = ConvertFrom-Yaml $Content
   
-  Merge-ContainedTemplates -Config $Config
-  return $Config
+  Merge-ContainedTemplates -Config $MainConfig
+  return $MainConfig
 }

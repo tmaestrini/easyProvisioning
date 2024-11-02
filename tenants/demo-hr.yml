@@ -1,7 +1,8 @@
 Tenant: <your tenant name> # name can be set according to your needs
 
 # optional; set the relative path (to the root) to another settings file which contains provisioning settings that should be applied to this site
-Contains: tenants/templates/demo-hr-templates.yml
+Contains: 
+  - tenants/templates/demo-hr-templates.yml
 
 # Sharepoint Specific Settings
 SharePoint:

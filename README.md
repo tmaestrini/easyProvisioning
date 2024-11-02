@@ -7,7 +7,7 @@ Under the hood, the provisioning engine is powered by the [PnP.Powershell](https
 Give it a try – I'm sure you will like it! 💪
 
 > [!NOTE]
-> 👉 For now, SPO is currently the only targeted service in M365 – but other services will follow asap.<br>
+> 👉 For now, SPO is currently the only targeted service in M365 – but other services can follow.<br>
 > Any contributors are welcome! 🙌
 
 ## Dependencies
@@ -372,30 +372,30 @@ An according list template could like the following:
 
 ### Integrate sub structures into your tenant template
 
-In order to structure or modularize your tenant structure, you can divide a basic structure into a _main definition template_ and an _extension template_.
-Therefore, you simply have to integrate the _extension template_ in the _main definition template_ by referencing the relative path (from the project's root) within the `contains` attribute.
+In order to structure or modularize your tenant structure, you can divide a basic structure into a _main definition template_ and one or many _extension template(s)_.
+Therefore, you simply have to integrate the _extension template(s)_ in the _main definition template_ by referencing all relative paths (from the project's root) as a list within the `contains` attribute.
 
 > [!NOTE]
-> The _extension template_ is a fully functional tenant template file (.yml), which could work as a standalone template definition.
+> Every _extension template_ is a fully functional tenant template file (.yml), which could work as a standalone template definition. As it will be included in the _main definition template_, the `AdminUpn` property will have no effect (you can drop this attribute).
 
 Your _main definition template_ must look like this in the first definition rows:
 
 ```yaml
 Tenant: <your tenant name> # name can be set according to your needs
 
-# optional; set the relative path (to the root) to another settings file which contains provisioning settings that should be applied to this site
-Contains: tenants/templates/hr.yml
+# optional; define a list that contains the relative paths (from the root) to every settings file which contains additional provisioning settings that should be applied to the current site
+Contains: 
+  - tenants/templates/hr.yml
 
 SharePoint:
   TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso)
-  AdminUpn: <the admin's UPN>
 # further structure omitted
 ```
 
 The _extension template_ file can contain any structure along your needs.
 
 > [!NOTE]
-> To make use of the _extension template_, make sure that the name of the SharePoint tenant (`TenantId`) in the _extension template_ matches exactly the tenant's name in the main definition template.
+> To make use of the _extension template(s)_, make sure that the name of the SharePoint tenant (`TenantId`) in the _extension template_ matches exactly the tenant's name in the main definition template.
 
 Example structure of the _extension template_:
 
@@ -405,7 +405,6 @@ Tenant: <your tenant name> # name can be set according to your needs
 # Sharepoint Specific Settings
 SharePoint:
   TenantId: <the SharePoint tenant name> # the name of the Sharepoint tenant (e.g. contoso) must match the tenant's name in the main definition template
-  AdminUpn: <the admin's UPN>
 
   Structure:
     - Site: HR One
