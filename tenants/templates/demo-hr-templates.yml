@@ -1,4 +1,4 @@
-Tenant: <your tenant name> # name can be set according to your needs
+Tenant: <your tenant name> # name can be set according to your needs but must match the name in the calling file
 
 # Sharepoint Specific Settings
 SharePoint:
