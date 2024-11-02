@@ -31,11 +31,12 @@ Give it a try – I'm sure you will like it! 💪
 
 ## Version history
 
-| Version | Date           | Comments                                |
-| ------- | :------------- | :-------------------------------------- |
-| 1.0     | November, 2023 | Initial release                         |
-| 1.1     | March, 2024    | Updated provisioning schema for tenants |
-| 1.1.1   | April, 2024    | Add reference templates integration     |
+| Version | Date           | Comments                                              |
+| ------- | :------------- | :---------------------------------------------------- |
+| 1.0     | November, 2023 | Initial release                                       |
+| 1.1     | March, 2024    | Updated provisioning schema for tenants               |
+| 1.1.1   | April, 2024    | Add reference templates integration                   |
+| 1.1.2   | November, 2024 | Add support for multiple / nested extension templates |
 
 ## Disclaimer
 
