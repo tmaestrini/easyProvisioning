@@ -370,7 +370,7 @@ An according list template could like the following:
 </pnp:Provisioning>
 ```
 
-### Integrate sub structures into your tenant template
+### Integrate sub structures into your tenant templates
 
 In order to structure or modularize your tenant structure, you can divide a basic structure into a _main definition template_ and one or many _extension template(s)_.
 Therefore, you simply have to integrate the _extension template(s)_ in the _main definition template_ by referencing all relative paths (from the project's root) as a list within the `contains` attribute.
@@ -397,10 +397,14 @@ The _extension template_ file can contain any structure along your needs.
 > [!NOTE]
 > To make use of the _extension template(s)_, make sure that the name of the SharePoint tenant (`TenantId`) in the _extension template_ matches exactly the tenant's name in the main definition template.
 
-Example structure of the _extension template_:
+Example structure of the _extension template_ `tenants/templates/hr.yml`:
 
 ```yaml
 Tenant: <your tenant name> # name can be set according to your needs
+
+# optionally could include further extension templates (remove the attribute if it does not contain any further templates)
+Contains: 
+  - tenants/templates/hr-subsites.yml
 
 # Sharepoint Specific Settings
 SharePoint:
